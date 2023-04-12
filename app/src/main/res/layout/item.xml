@@ -3,36 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".FirstFragment">
+    android:layout_height="85dp"
+    tools:context=".Item">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageItem"
         android:layout_width="74dp"
         android:layout_height="74dp"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/checkBox"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        android:src="@drawable/baseline_backpack_24" />
 
     <TextView
         android:id="@+id/itemName"
-        android:layout_width="0dp"
-        android:layout_height="42dp"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        android:layout_width="209dp"
+        android:layout_height="36dp"
+        app:layout_constraintEnd_toStartOf="@+id/editButton"
+        app:layout_constraintStart_toEndOf="@+id/imageItem"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Item Name" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="162dp"
-        android:layout_height="55dp"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintEnd_toStartOf="@+id/editButton"
+        app:layout_constraintStart_toEndOf="@+id/imageItem"
         app:layout_constraintTop_toBottomOf="@+id/itemName">
 
         <Button
@@ -54,8 +54,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView2"
-            android:layout_width="0dp"
+            android:id="@+id/itemCounterText"
+            android:layout_width="70dp"
             android:layout_height="34dp"
             android:text="0/0"
             android:textAlignment="center"
@@ -71,14 +71,16 @@
         android:id="@+id/checkBox"
         android:layout_width="48dp"
         android:layout_height="49dp"
-        android:text="CheckBox"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:scaleX="2"
+        android:scaleY="2"
+        />
 
     <ImageButton
         android:contentDescription="Edit"
-        android:id="@+id/imageButton"
+        android:id="@+id/editButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_edit"
