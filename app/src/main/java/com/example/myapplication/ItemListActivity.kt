@@ -15,7 +15,11 @@ class ItemListActivity : AppCompatActivity() {
         binding = ActivityItemListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        itemAdapter = ItemAdapter(mutableListOf())
+        var exampleItems = mutableListOf<Item>()
+        exampleItems.add(Item("Example 1"))
+        exampleItems.add(Item("Example 2"))
+
+        itemAdapter = ItemAdapter(exampleItems)
         binding.rvItems.adapter = itemAdapter
         binding.rvItems.layoutManager = LinearLayoutManager(this)
 
