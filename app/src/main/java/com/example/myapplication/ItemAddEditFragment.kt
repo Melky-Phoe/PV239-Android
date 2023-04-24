@@ -18,6 +18,8 @@ import com.example.myapplication.databinding.FragmentItemAddEditBinding
 class ItemAddEditFragment : Fragment() {
     private lateinit var binding: FragmentItemAddEditBinding
 
+    private val args: ItemAddEditFragmentArgs by navArgs()
+
     private val takePhotoLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             processPhotoResult(it)
@@ -28,7 +30,6 @@ class ItemAddEditFragment : Fragment() {
             processFromGalleryResult(it)
         }
 
-    // private val args: ItemAddEditFragmentArgs by navArgs()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentItemAddEditBinding.inflate(layoutInflater, container, false)
         return binding.root
