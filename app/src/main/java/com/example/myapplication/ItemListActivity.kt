@@ -30,7 +30,7 @@ class ItemListActivity : AppCompatActivity() {
         itemCategoryAdapter = ItemCategoryAdapter(exampleCategories)
         binding.rvCategories.adapter = itemCategoryAdapter
         binding.rvCategories.layoutManager = LinearLayoutManager(this)
-
-
     }
+
+
 }

@@ -3,26 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/itemListActivity">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/itemFragment"
         android:name="com.example.myapplication.ItemFragment"
-        android:label="@string/first_fragment_label"
+        android:label="ItemFragment"
         tools:layout="@layout/item">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_itemFragment_to_itemAddEditFragment"
+            app:destination="@id/itemAddEditFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.myapplication.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
 
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+    <fragment
+        android:id="@+id/itemAddEditFragment"
+        android:name="com.example.myapplication.ItemAddEditFragment"
+        android:label="ItemAddEditFragment"
+        tools:layout="@layout/fragment_item_add_edit">
+        <argument
+            android:name="Item"
+            android:defaultValue="@null"
+            app:argType="com.example.myapplication.Item"
+            app:nullable="true" />
     </fragment>
+
+    <activity
+        android:id="@+id/itemListActivity"
+        android:name="com.example.myapplication.ItemListActivity"
+        android:label="activity_item_list"
+        tools:layout="@layout/activity_item_list" />
+
 </navigation>
