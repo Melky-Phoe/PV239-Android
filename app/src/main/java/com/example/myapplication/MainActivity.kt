@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import com.example.myapplication.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), AppNavigator {
@@ -16,10 +17,11 @@ class MainActivity : AppCompatActivity(), AppNavigator {
     }
 
     override fun navigateToItemList() {
-        TODO("Not yet implemented")
+        //
     }
 
     override fun navigateToItemDetails(item: Item) {
-        TODO("Not yet implemented")
+        val action = ItemListFragmentDirections.actionItemListFragmentToItemAddEditFragment(item)
+        findNavController(R.id.nav_host_fragment).navigate(action)
     }
 }
