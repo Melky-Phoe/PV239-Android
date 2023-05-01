@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.FragmentItemListBinding
 
@@ -17,8 +17,8 @@ class ItemListFragment : Fragment() {
 
     private lateinit var binding: FragmentItemListBinding
     private lateinit var adapter: ItemAdapter
-    private val itemListRepository = ItemListRepository()
     private lateinit var appNavigator: AppNavigator
+    private val args: ItemListFragmentArgs by navArgs()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -36,36 +36,13 @@ class ItemListFragment : Fragment() {
         }
         binding.rvItems.layoutManager = LinearLayoutManager(requireContext())
         binding.rvItems.adapter = adapter
+        adapter.submitList(args.packerList.items)
 
-        // val test = requireArguments().getString(KEY_TEST) ?: ""
-        // Toast.makeText(requireContext(), test, Toast.LENGTH_SHORT).show()
-
-        val itemsObserver = Observer<List<Item>> { items ->
-            // Update list adapter
-            adapter.submitList(items)
-        }
-        itemListRepository.items.observe(this, itemsObserver)
-
-        itemListRepository.loadItems()
         return binding.root
     }
 
     fun showItemDetails(item: Item) {
         appNavigator.navigateToItemDetails(item)
-    }
-
-    companion object {
-        const val KEY_TEST = "key_test"
-
-        fun newInstance(test: String) : ItemListFragment {
-            val fragment = ItemListFragment()
-
-            val args = Bundle()
-            args.putString(KEY_TEST, test)
-            fragment.arguments = args
-
-            return fragment
-        }
     }
 
 }
