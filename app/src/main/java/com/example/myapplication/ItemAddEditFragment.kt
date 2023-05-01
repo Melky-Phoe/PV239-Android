@@ -17,7 +17,6 @@ import com.example.myapplication.databinding.FragmentItemAddEditBinding
 
 class ItemAddEditFragment : Fragment() {
     private lateinit var binding: FragmentItemAddEditBinding
-
     private val args: ItemAddEditFragmentArgs by navArgs()
 
     private val takePhotoLauncher: ActivityResultLauncher<Intent> =
@@ -32,6 +31,7 @@ class ItemAddEditFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentItemAddEditBinding.inflate(layoutInflater, container, false)
+        binding.itemNameTextInputLayout.hint = args.item.name
         return binding.root
     }
 

@@ -3,28 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/itemFragment">
-
+    app:startDestination="@id/listListFragment">
     <fragment
-        android:id="@+id/itemFragment"
-        android:name="com.example.myapplication.ItemFragment"
-        android:label="ItemFragment"
-        tools:layout="@layout/item">
-
+        android:id="@+id/itemListFragment"
+        android:name="com.example.myapplication.ItemListFragment"
+        android:label="fragment_item_list"
+        tools:layout="@layout/fragment_item_list" >
         <action
-            android:id="@+id/action_itemFragment_to_itemAddEditFragment"
+            android:id="@+id/action_itemListFragment_to_itemAddEditFragment"
             app:destination="@id/itemAddEditFragment" />
+        <argument
+            android:name="packerList"
+            app:argType="com.example.myapplication.PackerList" />
     </fragment>
-
     <fragment
         android:id="@+id/itemAddEditFragment"
         android:name="com.example.myapplication.ItemAddEditFragment"
-        android:label="ItemAddEditFragment"
-        tools:layout="@layout/fragment_item_add_edit">
+        android:label="ItemAddEditFragment" >
         <argument
             android:name="item"
-            android:defaultValue="@null"
-            app:argType="com.example.myapplication.Item"
-            app:nullable="true" />
+            app:argType="com.example.myapplication.Item" />
+    </fragment>
+    <fragment
+        android:id="@+id/listListFragment"
+        android:name="com.example.myapplication.ListListFragment"
+        android:label="fragment_list_list"
+        tools:layout="@layout/fragment_list_list" >
+        <action
+            android:id="@+id/action_listListFragment_to_itemListFragment"
+            app:destination="@id/itemListFragment" />
     </fragment>
 </navigation>
