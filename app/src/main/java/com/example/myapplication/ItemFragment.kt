@@ -45,9 +45,12 @@ class ItemFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.itemCounterText.text = "$_currentCount/$_totalCount"
+        /*
         binding.editButton.setOnClickListener {
             findNavController().navigate(R.id.action_itemFragment_to_itemAddEditFragment)
         }
+
+         */
 
         binding.plusButton.setOnClickListener {
             if (_currentCount < _totalCount) {

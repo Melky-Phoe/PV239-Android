@@ -18,8 +18,6 @@ import com.example.myapplication.databinding.FragmentItemAddEditBinding
 class ItemAddEditFragment : Fragment() {
     private lateinit var binding: FragmentItemAddEditBinding
 
-    private val args: ItemAddEditFragmentArgs by navArgs()
-
     private val takePhotoLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             processPhotoResult(it)
