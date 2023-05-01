@@ -1,11 +1,15 @@
 package com.example.myapplication
 
-import android.graphics.Picture
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Item(
     val name: String,
     val category: String,
-    val picture: Picture?,
+    val picture: String,
     val currentCount: Int,
     val totalCount: Int,
-)
+) : Parcelable {
+
+}
