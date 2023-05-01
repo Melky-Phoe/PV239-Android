@@ -1,7 +1,7 @@
 package com.example.myapplication
 
 interface AppNavigator {
-    fun navigateToItemList()
+    fun navigateToItemList(packerList: PackerList)
 
     fun navigateToItemDetails(item: Item)
 }

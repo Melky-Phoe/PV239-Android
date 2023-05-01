@@ -16,8 +16,9 @@ class MainActivity : AppCompatActivity(), AppNavigator {
 
     }
 
-    override fun navigateToItemList() {
-        //
+    override fun navigateToItemList(packerList: PackerList) {
+        val action = ListListFragmentDirections.actionListListFragmentToItemListFragment(packerList)
+        findNavController(R.id.nav_host_fragment).navigate(action)
     }
 
     override fun navigateToItemDetails(item: Item) {
