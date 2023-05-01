@@ -4,7 +4,7 @@ import android.graphics.Picture
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
-class ItemsRepository {
+class ItemListRepository {
     private val _items = MutableLiveData<List<Item>>()
     val items: LiveData<List<Item>> = _items
 

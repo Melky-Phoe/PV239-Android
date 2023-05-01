@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), AppNavigator {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -12,6 +12,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
+    }
+
+    override fun navigateToItemList() {
+        TODO("Not yet implemented")
+    }
+
+    override fun navigateToItemDetails(item: Item) {
+        TODO("Not yet implemented")
     }
 }
