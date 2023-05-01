@@ -2,10 +2,11 @@ package com.example.myapplication
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import kotlin.collections.List
 
-class ItemListRepository {
-    private val _items = MutableLiveData<List<Item>>()
-    val items: LiveData<List<Item>> = _items
+class ListListRepository {
+    private val _lists = MutableLiveData<List<PackerList>>()
+    val lists: LiveData<List<PackerList>> = _lists
 
     fun loadItems() {
         val exampleItems = mutableListOf<Item>(
@@ -15,6 +16,11 @@ class ItemListRepository {
             Item("Example 4", "Category 3", "", 2, 5),
             Item("Example 5", "Category 2", "", 0, 1)
         )
-        _items.value = exampleItems
+        val exampleLists = mutableListOf<PackerList>(
+            PackerList("List 1", exampleItems),
+            PackerList("List 2", exampleItems),
+            PackerList("List 3", mutableListOf<Item>())
+        )
+        _lists.value = exampleLists
     }
 }
