@@ -38,8 +38,8 @@ class ItemListFragment : Fragment() {
         binding.rvItems.layoutManager = LinearLayoutManager(requireContext())
         binding.rvItems.adapter = adapter
 
-        val test = requireArguments().getString(KEY_TEST) ?: ""
-        Toast.makeText(requireContext(), test, Toast.LENGTH_SHORT).show()
+        // val test = requireArguments().getString(KEY_TEST) ?: ""
+        // Toast.makeText(requireContext(), test, Toast.LENGTH_SHORT).show()
 
         val itemsObserver = Observer<List<Item>> { items ->
             // Update list adapter
