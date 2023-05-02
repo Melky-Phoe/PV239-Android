@@ -14,7 +14,7 @@ import com.example.myapplication.databinding.ItemBinding
  */
 class ItemFragment : Fragment() {
 
-    private lateinit var binding: ItemBinding
+  /*  private lateinit var binding: ItemBinding
 
     private var _totalCount = 3
     private var _currentCount: Int = 0
@@ -45,12 +45,12 @@ class ItemFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.itemCounterText.text = "$_currentCount/$_totalCount"
-        /*
+        *//*
         binding.editButton.setOnClickListener {
             findNavController().navigate(R.id.action_itemFragment_to_itemAddEditFragment)
         }
 
-         */
+         *//*
 
         binding.plusButton.setOnClickListener {
             if (_currentCount < _totalCount) {
@@ -82,5 +82,5 @@ class ItemFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-    }
+    }*/
 }

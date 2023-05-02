@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.FragmentItemListBinding
@@ -33,6 +34,7 @@ class ItemListFragment : Fragment() {
 
         adapter = ItemAdapter() {
             showItemDetails(it)
+            //updateItem(it)
         }
         binding.rvItems.layoutManager = LinearLayoutManager(requireContext())
         binding.rvItems.adapter = adapter
@@ -43,6 +45,10 @@ class ItemListFragment : Fragment() {
 
     fun showItemDetails(item: Item) {
         appNavigator.navigateToItemDetails(item)
+    }
+
+    fun updateItem(item: Item) {
+        Toast.makeText(context, "changed count", Toast.LENGTH_SHORT).show()
     }
 
 }
