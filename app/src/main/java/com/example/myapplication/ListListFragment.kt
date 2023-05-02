@@ -18,7 +18,9 @@ import java.util.jar.Pack200.Packer
 class ListListFragment : Fragment() {
     private lateinit var binding: FragmentListListBinding
     private lateinit var adapter: PackerListAdapter
-    private val listListRepository = ListListRepository()
+    private val listListRepository: ListListRepository by lazy {
+        ListListRepository(requireContext())
+    }
     private lateinit var appNavigator: AppNavigator
 
     override fun onAttach(context: Context) {
@@ -41,7 +43,7 @@ class ListListFragment : Fragment() {
             // Update list adapter
             adapter.submitList(items)
         }
-        listListRepository.lists.observe(this, listsObserver)
+        listListRepository.lists.observe(viewLifecycleOwner, listsObserver)
 
         listListRepository.loadItems()
         return binding.root
