@@ -8,9 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.myapplication.databinding.FragmentItemListBinding
 import com.example.myapplication.databinding.FragmentListListBinding
-import java.util.jar.Pack200.Packer
+import com.example.myapplication.repository.ListListRepository
 
 /**
  * A simple [Fragment] subclass.

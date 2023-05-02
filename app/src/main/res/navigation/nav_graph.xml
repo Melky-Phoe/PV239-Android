@@ -22,7 +22,7 @@
         android:label="ItemAddEditFragment" >
         <argument
             android:name="item"
-            app:argType="com.example.myapplication.Item" />
+            app:argType="com.example.myapplication.data.Item" />
     </fragment>
     <fragment
         android:id="@+id/listListFragment"

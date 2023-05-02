@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
+import com.example.myapplication.data.Item
+import com.example.myapplication.data.byteArrayToBitmap
 import com.example.myapplication.databinding.ItemBinding
 
 class ItemAdapter(
@@ -92,10 +94,6 @@ class ItemViewHolder(
     private fun bindPicture(pictureBytes: ByteArray) {
         val picture = byteArrayToBitmap(pictureBytes)
         binding.imageItem.setImageBitmap(picture)
-    }
-
-    private fun byteArrayToBitmap(byteArray: ByteArray): Bitmap? {
-        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
     }
 }
 

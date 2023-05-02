@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import com.example.myapplication.data.Item
 import com.example.myapplication.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), AppNavigator {
