@@ -110,7 +110,7 @@ class ItemAddEditFragment : Fragment() {
     }
 
     private fun setInitialValues() {
-        var item: Item = args.item
+        var item: Item? = args.item
 
         if (item != null) {
             _currentCount = item.currentCount
