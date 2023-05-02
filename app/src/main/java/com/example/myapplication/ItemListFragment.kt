@@ -7,9 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myapplication.data.Item
 import com.example.myapplication.databinding.FragmentItemListBinding
+import com.example.myapplication.repository.ItemRepository
 
 /**
  * A simple [Fragment] subclass.
@@ -20,6 +23,10 @@ class ItemListFragment : Fragment() {
     private lateinit var adapter: ItemAdapter
     private lateinit var appNavigator: AppNavigator
     private val args: ItemListFragmentArgs by navArgs()
+
+    private val itemRepository: ItemRepository by lazy {
+        ItemRepository(requireContext())
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,6 +47,12 @@ class ItemListFragment : Fragment() {
         binding.rvItems.adapter = adapter
         adapter.submitList(args.packerList.items)
 
+        binding.fab.setOnClickListener {
+            findNavController()
+                .navigate(
+                    ItemListFragmentDirections.actionItemListFragmentToItemAddEditFragment()
+                )
+        }
         return binding.root
     }
 
@@ -49,6 +62,14 @@ class ItemListFragment : Fragment() {
 
     fun updateItem(item: Item) {
         Toast.makeText(context, "changed count", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun refreshList() {
+        adapter.submitList(itemRepository.getAllItems())
+    }
+    override fun onResume() {
+        super.onResume()
+        refreshList()
     }
 
 }

@@ -1,8 +1,11 @@
-package com.example.myapplication
+package com.example.myapplication.repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.myapplication.data.Item
+import com.example.myapplication.PackerList
+import com.example.myapplication.data.Categories
 import com.example.myapplication.database.ItemDao
 import com.example.myapplication.database.ItemDatabase
 import kotlin.collections.List
@@ -17,11 +20,11 @@ class ListListRepository (
 
     fun loadItems() {
         val exampleItems = mutableListOf<Item>(
-            Item(0, "Example 1", "Category 1", null, 0, 1),
-            Item(1, "Example 2", "Category 1", null, 0, 3),
-            Item(2, "Example 3", "Category 2", null, 0, 2),
-            Item(3, "Example 4", "Category 3", null, 2, 5),
-            Item(4, "Example 5", "Category 2", null, 0, 1)
+            Item(0, "Example 1", Categories.CLOTHING, null, 0, 1),
+            Item(1, "Example 2", Categories.FOOD, null, 0, 3),
+            Item(2, "Example 3", Categories.OTHER, null, 0, 2),
+            Item(3, "Example 4", Categories.CLOTHING, null, 2, 5),
+            Item(4, "Example 5", Categories.CLOTHING, null, 0, 1)
         )
         val exampleLists = mutableListOf<PackerList>(
             PackerList("List 1", exampleItems),

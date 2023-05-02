@@ -1,14 +1,16 @@
-package com.example.myapplication
+package com.example.myapplication.data
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.io.ByteArrayOutputStream
 
 @Parcelize
 data class Item(
     val id: Long,
     var name: String,
-    var category: String,
+    var category: Categories,
     var picture: ByteArray?,
     var currentCount: Int,
     var totalCount: Int,
@@ -38,4 +40,14 @@ data class Item(
         result = 31 * result + totalCount
         return result
     }
+}
+
+fun byteArrayToBitmap(byteArray: ByteArray): Bitmap? {
+    return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+}
+
+fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
+    val outputStream = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+    return outputStream.toByteArray()
 }
