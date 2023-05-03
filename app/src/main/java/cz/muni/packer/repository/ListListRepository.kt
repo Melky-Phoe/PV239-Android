@@ -1,6 +1,7 @@
 package cz.muni.packer.repository
 
 import android.content.Context
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import cz.muni.packer.data.Item
@@ -17,15 +18,21 @@ class ListListRepository (
     private val _lists = MutableLiveData<List<PackerList>>()
     val lists: LiveData<List<PackerList>> = _lists
 
+    // temporary to save items
+    private val itemRepository: ItemRepository by lazy {
+        ItemRepository(context)
+    }
 
     fun loadItems() {
         val exampleItems = mutableListOf<Item>(
-            Item(0, "Example 1", Categories.CLOTHING, null, 0, 1),
-            Item(1, "Example 2", Categories.FOOD, null, 0, 3),
-            Item(2, "Example 3", Categories.OTHER, null, 0, 2),
-            Item(3, "Example 4", Categories.CLOTHING, null, 2, 5),
-            Item(4, "Example 5", Categories.CLOTHING, null, 0, 1)
+            Item(1, "Example 1", Categories.CLOTHING, null, 0, 1),
+            Item(2, "Example 2", Categories.FOOD, null, 0, 3),
+            Item(3, "Example 3", Categories.OTHER, null, 0, 2),
+            Item(4, "Example 4", Categories.CLOTHING, null, 2, 5),
+            Item(5, "Example 5", Categories.CLOTHING, null, 0, 1)
         )
+        itemRepository.saveAll(exampleItems)
+
         val exampleLists = mutableListOf<PackerList>(
             PackerList("List 1", exampleItems),
             PackerList("List 2", exampleItems),
