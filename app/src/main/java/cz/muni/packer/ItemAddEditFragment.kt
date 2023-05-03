@@ -50,7 +50,7 @@ class ItemAddEditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        binding.countEditText.setText("1")
         // val item = args.item
          setInitialValues()
         binding.plusButton.setOnClickListener {
@@ -59,7 +59,7 @@ class ItemAddEditFragment : Fragment() {
             )
         }
         binding.minusButton.setOnClickListener {
-            if (binding.countEditText.text.toString().toInt() >0) {
+            if (binding.countEditText.text.toString().toInt() > 0) {
                 binding.countEditText.setText(
                     (binding.countEditText.text.toString().toInt() - 1).toString()
                 )
