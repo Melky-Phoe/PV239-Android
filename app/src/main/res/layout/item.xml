@@ -35,13 +35,15 @@
             app:layout_constraintStart_toEndOf="@+id/minusButton"
             app:layout_constraintEnd_toStartOf="@id/plusButton"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Item Name" />
+            tools:text="@string/item_name"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/minusButton"
             android:layout_width="55dp"
             android:layout_height="55dp"
-            android:text="-"
+            android:text="@string/minus_button"
+            android:textStyle="bold"
             android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +53,8 @@
             android:id="@+id/plusButton"
             android:layout_width="55dp"
             android:layout_height="55dp"
-            android:text="+"
+            android:text="@string/plus_button"
+            android:textStyle="bold"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

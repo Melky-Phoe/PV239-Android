@@ -2,14 +2,25 @@
     <string name="app_name">Packer</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="item_name">Item name</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_button">Add</string>
+    <string name="edit_button">Edit</string>
+
+    <string name="minus_button">-</string>
+    <string name="plus_button">+</string>
+
+    <string name="total_item_count">Total Item count</string>
+    <string name="category">Category</string>
+    <string name="save_button">Save</string>
+    <string name="image">Image</string>
+    <string name="open_gallery_button">Open Gallery</string>
+    <string name="open_camera_button">Open Camera</string>
+
+    <string name="list_name">List Name</string>
+
+    <string name="item_name">Item Name</string>
+    <string name="item_picture_description">Item Picture</string>
+    <string name="add_packerList_button_description">Add PackerList Button</string>
 </resources>
