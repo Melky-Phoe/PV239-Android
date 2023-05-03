@@ -84,8 +84,9 @@ class ItemViewHolder(
             binding.checkBox.isChecked = true
         }
 
-        binding.root.setOnClickListener {
+        binding.root.setOnLongClickListener {
             onItemClick(item)
+            true
         }
     }
 
