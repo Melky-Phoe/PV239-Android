@@ -14,6 +14,9 @@ interface ItemDao {
     @Query("SELECT * FROM ItemEntity")
     fun selectAll(): List<ItemEntity>
 
+    @Update()
+    fun updateItem(entity: ItemEntity) // not prefered
+
     @Query("UPDATE ItemEntity SET currentCount = :count WHERE id = :id")
-    fun updateCount(count: Int, id: Long)
+    fun updateCount(count: Int, id: Long) // Myslim ze by byl nejrychlejsi, ale nefunguje
 }

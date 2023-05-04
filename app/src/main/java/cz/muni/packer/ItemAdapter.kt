@@ -10,7 +10,7 @@ import cz.muni.packer.data.byteArrayToBitmap
 import cz.muni.packer.databinding.ItemBinding
 
 class ItemAdapter(
-    private val onItemClick: (Item) -> Unit //, private val updateListener: (Item) -> Unit,
+    private val onItemClick: (Item) -> Unit, private val onCountUpdate: (Item) -> Unit,
 ) : ListAdapter<Item, ItemViewHolder>(ItemDiffUtil()) {
     interface UpdateListener {
         fun onCurrentCountUpdate(item: Item)
@@ -23,8 +23,7 @@ class ItemAdapter(
         )
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(getItem(position), onItemClick)
-        //holder.bind(getItem(position), updateListener)
+        holder.bind(getItem(position), onItemClick, onCountUpdate)
     }
 }
 
@@ -32,13 +31,11 @@ class ItemViewHolder(
     private val binding: ItemBinding //, private val updateListener: (Item) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
-
     private lateinit var _item: Item
     private var _currentCount: Int = 0
         set(value) {
             field = value
             _item.currentCount = value
-            // updateListener(_item)
             updateCountText()
             if (value == _item.totalCount) {
                 binding.checkBox.isChecked = true
@@ -49,7 +46,7 @@ class ItemViewHolder(
         binding.itemCounterText.text = "${_currentCount}/${_item.totalCount}"
     }
     
-    fun bind(item: Item, onItemClick: (Item) -> Unit) {
+    fun bind(item: Item, onItemClick: (Item) -> Unit, onCountUpdate: (Item) -> Unit) {
         _item = item
         binding.itemName.text = item.name
         binding.itemCounterText.text = "${item.currentCount}/${item.totalCount}"
@@ -58,7 +55,7 @@ class ItemViewHolder(
         binding.plusButton.setOnClickListener {
             if (item.currentCount < item.totalCount) {
                 _currentCount++
-//                item.setCurrentCount(item.currentCount+1)
+                onCountUpdate(item)
             }
         }
 
@@ -69,14 +66,14 @@ class ItemViewHolder(
             }
             if (item.currentCount > 0) {
                 _currentCount--
-//                item.setCurrentCount(item.currentCount-1)
+                onCountUpdate(item)
             }
         }
 
         binding.checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 _currentCount = item.totalCount
-//                item.setCurrentCount(item.totalCount)
+                onCountUpdate(item)
                 binding.checkBox.isEnabled = false // Disable checkbox
             }
         }
