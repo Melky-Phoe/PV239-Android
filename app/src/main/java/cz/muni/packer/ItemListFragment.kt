@@ -10,8 +10,6 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import cz.muni.packer.ItemListFragmentArgs
-import cz.muni.packer.ItemListFragmentDirections
 import cz.muni.packer.data.Item
 import cz.muni.packer.databinding.FragmentItemListBinding
 import cz.muni.packer.repository.ItemRepository
@@ -38,7 +36,7 @@ class ItemListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentItemListBinding.inflate(layoutInflater, container, false)
 
         adapter = ItemAdapter(
@@ -51,13 +49,11 @@ class ItemListFragment : Fragment() {
         )
         binding.rvItems.layoutManager = LinearLayoutManager(requireContext())
         binding.rvItems.adapter = adapter
-        adapter.submitList(args.packerList.items)
+        adapter.submitList(itemRepository.getItemsForPackerList(args.packerListId))
 
         binding.fab.setOnClickListener {
-            findNavController()
-                .navigate(
-                    ItemListFragmentDirections.actionItemListFragmentToItemAddEditFragment()
-                )
+            val action = ItemListFragmentDirections.actionItemListFragmentToItemAddEditFragment(packerListId = args.packerListId)
+            findNavController().navigate(action)
         }
         return binding.root
     }
@@ -73,7 +69,7 @@ class ItemListFragment : Fragment() {
     }
 
     private fun refreshList() {
-        adapter.submitList(itemRepository.getAllItems())
+        adapter.submitList(itemRepository.getItemsForPackerList(args.packerListId))
     }
     override fun onResume() {
         super.onResume()

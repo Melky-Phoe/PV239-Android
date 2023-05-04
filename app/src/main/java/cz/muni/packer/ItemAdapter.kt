@@ -28,7 +28,7 @@ class ItemAdapter(
 }
 
 class ItemViewHolder(
-    private val binding: ItemBinding //, private val updateListener: (Item) -> Unit
+    private val binding: ItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var _item: Item
@@ -49,7 +49,7 @@ class ItemViewHolder(
     fun bind(item: Item, onItemClick: (Item) -> Unit, onCountUpdate: (Item) -> Unit) {
         _item = item
         binding.itemName.text = item.name
-        binding.itemCounterText.text = "${item.currentCount}/${item.totalCount}"
+        updateCountText()
 
         item.picture?.let { bindPicture(it) }
         binding.plusButton.setOnClickListener {
@@ -70,7 +70,7 @@ class ItemViewHolder(
             }
         }
 
-        binding.checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 _currentCount = item.totalCount
                 onCountUpdate(item)
@@ -92,6 +92,7 @@ class ItemViewHolder(
         binding.imageItem.setImageBitmap(picture)
     }
 }
+
 
 class ItemDiffUtil : DiffUtil.ItemCallback<Item>() {
     override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean =

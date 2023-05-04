@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import cz.muni.packer.ItemAddEditFragmentArgs
 import cz.muni.packer.data.Item
 import cz.muni.packer.data.Categories
 import cz.muni.packer.data.bitmapToByteArray
@@ -103,7 +102,8 @@ class ItemAddEditFragment : Fragment() {
                     picture = pictureBytes,
                     currentCount = _currentCount,
                     totalCount = totalCount,
-                    id = args.item?.id
+                    id = args.item?.id,
+                    packerListId = args.packerListId
                 )
                 findNavController().navigateUp()
             }
@@ -111,7 +111,7 @@ class ItemAddEditFragment : Fragment() {
     }
 
     private fun setInitialValues() {
-        var item: Item? = args.item
+        val item: Item? = args.item
 
         if (item != null) {
             _currentCount = item.currentCount
