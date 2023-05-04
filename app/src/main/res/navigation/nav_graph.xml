@@ -13,8 +13,8 @@
             android:id="@+id/action_itemListFragment_to_itemAddEditFragment"
             app:destination="@id/itemAddEditFragment" />
         <argument
-            android:name="packerList"
-            app:argType="cz.muni.packer.PackerList" />
+            android:name="packerListId"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/itemAddEditFragment"
@@ -25,6 +25,10 @@
             android:defaultValue="@null"
             app:argType="cz.muni.packer.data.Item"
             app:nullable="true"/>
+        <argument
+            android:name="packerListId"
+            android:defaultValue="0L"
+            app:argType="long"/>
     </fragment>
     <fragment
         android:id="@+id/listListFragment"

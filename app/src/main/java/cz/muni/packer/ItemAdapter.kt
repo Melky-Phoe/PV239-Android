@@ -29,59 +29,48 @@ class ItemAdapter(
 }
 
 class ItemViewHolder(
-    private val binding: ItemBinding //, private val updateListener: (Item) -> Unit
+    private val binding: ItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-
     private lateinit var _item: Item
-    private var _currentCount: Int = 0
-        set(value) {
-            field = value
-            _item.currentCount = value
-            // updateListener(_item)
-            updateCountText()
-            if (value == _item.totalCount) {
-                binding.checkBox.isChecked = true
-            }
-        }
 
     private fun updateCountText() {
-        binding.itemCounterText.text = "${_currentCount}/${_item.totalCount}"
+        binding.itemCounterText.text = "${_item.currentCount}/${_item.totalCount}"
     }
-    
+
     fun bind(item: Item, onItemClick: (Item) -> Unit) {
         _item = item
         binding.itemName.text = item.name
-        binding.itemCounterText.text = "${item.currentCount}/${item.totalCount}"
+        updateCountText()
 
         item.picture?.let { bindPicture(it) }
         binding.plusButton.setOnClickListener {
-            if (item.currentCount < item.totalCount) {
-                _currentCount++
-//                item.setCurrentCount(item.currentCount+1)
+            if (_item.currentCount < _item.totalCount) {
+                _item.currentCount++
+                updateCountText()
+                if (_item.currentCount == _item.totalCount) {
+                    binding.checkBox.isChecked = true
+                }
             }
         }
 
         binding.minusButton.setOnClickListener {
-            if (item.currentCount == item.totalCount) {
+            if (_item.currentCount == _item.totalCount) {
                 binding.checkBox.isEnabled = true
                 binding.checkBox.isChecked = false
             }
-            if (item.currentCount > 0) {
-                _currentCount--
-//                item.setCurrentCount(item.currentCount-1)
+            if (_item.currentCount > 0) {
+                _item.currentCount--
+                updateCountText()
             }
         }
 
-        binding.checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                _currentCount = item.totalCount
-//                item.setCurrentCount(item.totalCount)
+                _item.currentCount = _item.totalCount
+                updateCountText()
                 binding.checkBox.isEnabled = false // Disable checkbox
             }
-        }
-        if (item.currentCount == item.totalCount) {
-            binding.checkBox.isChecked = true
         }
 
         binding.root.setOnLongClickListener {
@@ -95,6 +84,7 @@ class ItemViewHolder(
         binding.imageItem.setImageBitmap(picture)
     }
 }
+
 
 class ItemDiffUtil : DiffUtil.ItemCallback<Item>() {
     override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean =
