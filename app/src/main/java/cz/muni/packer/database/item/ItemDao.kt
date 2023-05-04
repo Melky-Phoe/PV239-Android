@@ -1,4 +1,4 @@
-package cz.muni.packer.database
+package cz.muni.packer.database.item
 
 import androidx.room.*
 
@@ -13,6 +13,9 @@ interface ItemDao {
 
     @Query("SELECT * FROM ItemEntity")
     fun selectAll(): List<ItemEntity>
+
+    @Query("SELECT * FROM ItemEntity WHERE packerListId = :packerListId")
+    fun getItemsForPackerList(packerListId: Long): List<ItemEntity>
 
     @Query("UPDATE ItemEntity SET currentCount = :count WHERE id = :id")
     fun updateCount(count: Int, id: Long)

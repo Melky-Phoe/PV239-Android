@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import cz.muni.packer.data.PackerList
 import cz.muni.packer.databinding.ListBinding
 
 class PackerListAdapter(

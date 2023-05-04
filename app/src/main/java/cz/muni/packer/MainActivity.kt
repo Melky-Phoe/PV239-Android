@@ -3,9 +3,8 @@ package cz.muni.packer
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import cz.muni.packer.ItemListFragmentDirections
-import cz.muni.packer.ListListFragmentDirections
 import cz.muni.packer.data.Item
+import cz.muni.packer.data.PackerList
 import cz.muni.packer.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), AppNavigator {
@@ -20,7 +19,7 @@ class MainActivity : AppCompatActivity(), AppNavigator {
     }
 
     override fun navigateToItemList(packerList: PackerList) {
-        val action = ListListFragmentDirections.actionListListFragmentToItemListFragment(packerList)
+        val action = ListListFragmentDirections.actionListListFragmentToItemListFragment(packerList.id)
         findNavController(R.id.nav_host_fragment).navigate(action)
     }
 

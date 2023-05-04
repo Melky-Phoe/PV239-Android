@@ -8,10 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import cz.muni.packer.data.PackerList
 import cz.muni.packer.databinding.FragmentListListBinding
-import cz.muni.packer.repository.ListListRepository
+import cz.muni.packer.repository.PackerListRepository
 
 /**
  * A simple [Fragment] subclass.
@@ -19,8 +19,8 @@ import cz.muni.packer.repository.ListListRepository
 class ListListFragment : Fragment() {
     private lateinit var binding: FragmentListListBinding
     private lateinit var adapter: PackerListAdapter
-    private val listListRepository: ListListRepository by lazy {
-        ListListRepository(requireContext())
+    private val packerListRepository: PackerListRepository by lazy {
+        PackerListRepository(requireContext())
     }
     private lateinit var appNavigator: AppNavigator
 
@@ -44,13 +44,10 @@ class ListListFragment : Fragment() {
             showAddPackerListDialog()
         }
 
-        val listsObserver = Observer<List<PackerList>> { items ->
-            // Update list adapter
-            adapter.submitList(items)
-        }
-        listListRepository.lists.observe(viewLifecycleOwner, listsObserver)
+        // Load packer lists and submit them to the adapter
+        val packerLists = packerListRepository.getAllLists()
+        adapter.submitList(packerLists)
 
-        listListRepository.loadItems()
         return binding.root
     }
 
@@ -77,19 +74,17 @@ class ListListFragment : Fragment() {
     }
 
     private fun createNewPackerList(listName: String) {
-        val newPackerList = PackerList(name = listName, items = emptyList())
+        val newPackerList = PackerList(0, name = listName, items = emptyList())
 
-        // Add the new PackerList to your Firebase Realtime Database
-        // You may need to modify this code to match your existing database structure
-        //val database = FirebaseDatabase.getInstance()
-        //val packerListReference = database.getReference("packerLists").push()
+        // Save the new PackerList to the database and get the generated ID
+        val generatedPackerListId = packerListRepository.addPackerList(newPackerList)
 
-        //packerListReference.setValue(newPackerList)
+        // Create a new PackerList with the generated ID
+        val newPackerListWithId = newPackerList.copy(id = generatedPackerListId)
 
-        // temporary solution - for testing
+        // Update the adapter with the new list
         val newList = adapter.currentList.toMutableList()
-        newList.add(newPackerList)
-
+        newList.add(newPackerListWithId)
         adapter.submitList(newList)
     }
 
