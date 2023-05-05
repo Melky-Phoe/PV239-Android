@@ -14,7 +14,7 @@ import cz.muni.packer.database.packerlist.PackerListEntity
 abstract class ItemDatabase : RoomDatabase() {
 
     companion object {
-        private const val NAME = "item.db"
+        private const val NAME = "item1.db"
 
         fun create(context: Context): ItemDatabase =
             Room.databaseBuilder(context, ItemDatabase::class.java, NAME)

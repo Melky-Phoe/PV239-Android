@@ -39,10 +39,14 @@ class ItemListFragment : Fragment() {
     ): View {
         binding = FragmentItemListBinding.inflate(layoutInflater, container, false)
 
-        adapter = ItemAdapter() {
-            showItemDetails(it)
-            //updateItem(it)
-        }
+        adapter = ItemAdapter(
+            onItemClick = { item ->
+                showItemDetails(item)
+            },
+            onCountUpdate = { item ->
+                updateItemCount(item)
+            }
+        )
         binding.rvItems.layoutManager = LinearLayoutManager(requireContext())
         binding.rvItems.adapter = adapter
         adapter.submitList(itemRepository.getItemsForPackerList(args.packerListId))
@@ -54,12 +58,13 @@ class ItemListFragment : Fragment() {
         return binding.root
     }
 
-    fun showItemDetails(item: Item) {
+    private fun showItemDetails(item: Item) {
         appNavigator.navigateToItemDetails(item)
     }
 
-    fun updateItem(item: Item) {
-        Toast.makeText(context, "changed count", Toast.LENGTH_SHORT).show()
+    private fun updateItemCount(item: Item) {
+//        itemRepository.updateItem(item)
+        itemRepository.updateCount(item.id, item.currentCount)
     }
 
     private fun refreshList() {

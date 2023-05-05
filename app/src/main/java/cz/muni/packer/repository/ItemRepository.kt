@@ -27,6 +27,10 @@ class ItemRepository (
         dao.persist(item.toEntity())
     }
 
+    fun updateCount(id: Long, currentCount: Int) {
+        dao.updateCount(id = id, count = currentCount)
+    }
+
     fun getAllItems(): List<Item> =
         dao.selectAll()
             .map { it.toAppData() }

@@ -10,7 +10,7 @@ import cz.muni.packer.data.byteArrayToBitmap
 import cz.muni.packer.databinding.ItemBinding
 
 class ItemAdapter(
-    private val onItemClick: (Item) -> Unit //, private val updateListener: (Item) -> Unit,
+    private val onItemClick: (Item) -> Unit, private val onCountUpdate: (Item) -> Unit,
 ) : ListAdapter<Item, ItemViewHolder>(ItemDiffUtil()) {
     interface UpdateListener {
         fun onCurrentCountUpdate(item: Item)
@@ -23,8 +23,7 @@ class ItemAdapter(
         )
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(getItem(position), onItemClick)
-        //holder.bind(getItem(position), updateListener)
+        holder.bind(getItem(position), onItemClick, onCountUpdate)
     }
 }
 
@@ -33,44 +32,56 @@ class ItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var _item: Item
+    private var _currentCount: Int = 0
+        set(value) {
+            field = value
+            _item.currentCount = value
+            updateCountText()
+            if (value == _item.totalCount) {
+                binding.checkBox.isChecked = true
+            }
+        }
+        get() {
+            return _item.currentCount
+        }
 
     private fun updateCountText() {
-        binding.itemCounterText.text = "${_item.currentCount}/${_item.totalCount}"
+        binding.itemCounterText.text = "${_currentCount}/${_item.totalCount}"
     }
-
-    fun bind(item: Item, onItemClick: (Item) -> Unit) {
+    
+    fun bind(item: Item, onItemClick: (Item) -> Unit, onCountUpdate: (Item) -> Unit) {
         _item = item
         binding.itemName.text = item.name
         updateCountText()
 
         item.picture?.let { bindPicture(it) }
         binding.plusButton.setOnClickListener {
-            if (_item.currentCount < _item.totalCount) {
-                _item.currentCount++
-                updateCountText()
-                if (_item.currentCount == _item.totalCount) {
-                    binding.checkBox.isChecked = true
-                }
+            if (item.currentCount < item.totalCount) {
+                _currentCount++
+                onCountUpdate(item)
             }
         }
 
         binding.minusButton.setOnClickListener {
-            if (_item.currentCount == _item.totalCount) {
+            if (item.currentCount == item.totalCount) {
                 binding.checkBox.isEnabled = true
                 binding.checkBox.isChecked = false
             }
-            if (_item.currentCount > 0) {
-                _item.currentCount--
-                updateCountText()
+            if (item.currentCount > 0) {
+                _currentCount--
+                onCountUpdate(item)
             }
         }
 
         binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                _item.currentCount = _item.totalCount
-                updateCountText()
+                _currentCount = item.totalCount
+                onCountUpdate(item)
                 binding.checkBox.isEnabled = false // Disable checkbox
             }
+        }
+        if (item.currentCount == item.totalCount) {
+            binding.checkBox.isChecked = true
         }
 
         binding.root.setOnLongClickListener {
