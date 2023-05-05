@@ -27,11 +27,8 @@ class ItemRepository (
         dao.persist(item.toEntity())
     }
 
-    fun updateItem(item: Item) {
-        dao.persist(item.toEntity()) // Zkouska jestli funguje persist, ktery vsude jinde funguje
-    }
     fun updateCount(id: Long, currentCount: Int) {
-        dao.updateCount(id = id, count = currentCount)  // Toto bych preferoval, ale nefungovalo
+        dao.updateCount(id = id, count = currentCount)
     }
 
     fun getAllItems(): List<Item> =

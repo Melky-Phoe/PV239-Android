@@ -63,9 +63,8 @@ class ItemListFragment : Fragment() {
     }
 
     private fun updateItemCount(item: Item) {
-        Toast.makeText(context, "changed count", Toast.LENGTH_SHORT).show() // Debug vypis
-        itemRepository.updateItem(item)
-//        itemRepository.updateCount(item.id, item.currentCount)
+//        itemRepository.updateItem(item)
+        itemRepository.updateCount(item.id, item.currentCount)
     }
 
     private fun refreshList() {

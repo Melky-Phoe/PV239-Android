@@ -17,9 +17,6 @@ interface ItemDao {
     @Query("SELECT * FROM ItemEntity WHERE packerListId = :packerListId")
     fun getItemsForPackerList(packerListId: Long): List<ItemEntity>
 
-    @Update()
-    fun updateItem(entity: ItemEntity) // not prefered
-
     @Query("UPDATE ItemEntity SET currentCount = :count WHERE id = :id")
-    fun updateCount(count: Int, id: Long) // Myslim ze by byl nejrychlejsi, ale nefunguje
+    fun updateCount(count: Int, id: Long)
 }

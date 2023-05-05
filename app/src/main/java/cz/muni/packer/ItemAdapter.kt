@@ -41,6 +41,9 @@ class ItemViewHolder(
                 binding.checkBox.isChecked = true
             }
         }
+        get() {
+            return _item.currentCount
+        }
 
     private fun updateCountText() {
         binding.itemCounterText.text = "${_currentCount}/${_item.totalCount}"
