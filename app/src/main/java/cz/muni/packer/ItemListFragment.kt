@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,6 +56,9 @@ class ItemListFragment : Fragment() {
             val action = ItemListFragmentDirections.actionItemListFragmentToItemAddEditFragment(packerListId = args.packerListId)
             findNavController().navigate(action)
         }
+        // TODO: change title to list name
+        // activity?.findViewById<Toolbar>(R.id.toolbar)?.title = args.packerListId.toString()
+
         return binding.root
     }
 
