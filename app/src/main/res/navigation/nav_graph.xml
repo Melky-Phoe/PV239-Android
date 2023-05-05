@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/itemListFragment"
         android:name="cz.muni.packer.ItemListFragment"
-        android:label="fragment_item_list"
+        android:label="List items"
         tools:layout="@layout/fragment_item_list" >
         <action
             android:id="@+id/action_itemListFragment_to_itemAddEditFragment"
@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/itemAddEditFragment"
         android:name="cz.muni.packer.ItemAddEditFragment"
-        android:label="ItemAddEditFragment" >
+        android:label="Add / Edit Item" >
         <argument
             android:name="item"
             android:defaultValue="@null"
@@ -33,7 +33,7 @@
     <fragment
         android:id="@+id/listListFragment"
         android:name="cz.muni.packer.ListListFragment"
-        android:label="fragment_list_list"
+        android:label="My lists"
         tools:layout="@layout/fragment_list_list" >
         <action
             android:id="@+id/action_listListFragment_to_itemListFragment"
