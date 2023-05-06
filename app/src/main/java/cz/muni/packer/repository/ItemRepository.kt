@@ -43,4 +43,8 @@ class ItemRepository (
         val entities = data.map { it.toEntity() }
         dao.persist(entities)
     }
+
+    fun deleteById(id: Long) {
+        dao.deleteItemById(id)
+    }
 }

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -107,6 +108,23 @@ class ItemAddEditFragment : Fragment() {
                 )
                 findNavController().navigateUp()
             }
+        }
+        binding.deleteButton.setOnClickListener {
+            val builder = context?.let { it1 -> AlertDialog.Builder(it1) }
+            if (builder != null) {
+                builder.setTitle("Are you sure?")
+                builder.setMessage("Do you want to delete this item?")
+                builder.setPositiveButton("Yes") { dialog, which ->
+                    args.item?.id?.let { it1 -> itemRepository.deleteById(it1) }
+                    findNavController().navigateUp()
+                }
+                builder.setNegativeButton("No") { dialog, which ->
+                    // Do nothing
+                }
+                val dialog = builder.create()
+                dialog.show()
+            }
+
         }
     }
 
