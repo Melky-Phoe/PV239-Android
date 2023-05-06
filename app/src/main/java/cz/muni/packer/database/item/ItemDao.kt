@@ -19,4 +19,7 @@ interface ItemDao {
 
     @Query("UPDATE ItemEntity SET currentCount = :count WHERE id = :id")
     fun updateCount(count: Int, id: Long)
+
+    @Query("DELETE FROM ItemEntity WHERE id = :id")
+    fun deleteItemById(id: Long)
 }

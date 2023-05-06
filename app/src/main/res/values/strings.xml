@@ -23,4 +23,5 @@
     <string name="item_name">Item Name</string>
     <string name="item_picture_description">Item Picture</string>
     <string name="add_packerList_button_description">Add PackerList Button</string>
+    <string name="delete">Delete</string>
 </resources>
