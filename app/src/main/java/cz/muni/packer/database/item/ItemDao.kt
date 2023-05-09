@@ -1,4 +1,5 @@
 package cz.muni.packer.database.item
+/*
 
 import androidx.room.*
 
@@ -19,4 +20,4 @@ interface ItemDao {
 
     @Query("UPDATE ItemEntity SET currentCount = :count WHERE id = :id")
     fun updateCount(count: Int, id: Long)
-}
+}*/

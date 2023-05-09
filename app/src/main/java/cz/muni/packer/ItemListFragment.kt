@@ -6,13 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.packer.data.Category
-import cz.muni.packer.data.Item
 import cz.muni.packer.databinding.FragmentItemListBinding
 import cz.muni.packer.repository.ItemRepository
 
@@ -27,7 +25,7 @@ class ItemListFragment : Fragment() {
     private val args: ItemListFragmentArgs by navArgs()
 
     private val itemRepository: ItemRepository by lazy {
-        ItemRepository(requireContext())
+        ItemRepository()
     }
 
     override fun onAttach(context: Context) {
@@ -41,7 +39,17 @@ class ItemListFragment : Fragment() {
     ): View {
         binding = FragmentItemListBinding.inflate(layoutInflater, container, false)
 
-        val packerListItems = itemRepository.getItemsForPackerList(args.packerListId)
+        itemRepository.getItems(args.packerListId) { packerListItems ->
+            val itemMap = packerListItems.groupBy { it.category }
+            val categoryItemList = itemMap.map { (category, itemList) ->
+                Category(category.name, itemList)
+            }
+
+            adapter = CategoryAdapter(categoryItemList, appNavigator, itemRepository)
+            binding.rvItems.layoutManager = LinearLayoutManager(requireContext())
+            binding.rvItems.adapter = adapter
+        }
+        /*val packerListItems = itemRepository.getItemsForPackerList(args.packerListId)
         val itemMap = packerListItems.groupBy { it.category }
         val categoryItemList = itemMap.map { (category, itemList) ->
             Category(category.name, itemList)
@@ -49,7 +57,7 @@ class ItemListFragment : Fragment() {
 
         adapter = CategoryAdapter(categoryItemList, appNavigator, itemRepository)
         binding.rvItems.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvItems.adapter = adapter
+        binding.rvItems.adapter = adapter*/
 
         binding.fab.setOnClickListener {
             val action = ItemListFragmentDirections.actionItemListFragmentToItemAddEditFragment(packerListId = args.packerListId)

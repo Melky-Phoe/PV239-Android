@@ -1,5 +1,6 @@
 package cz.muni.packer.repository.mapper
 
+/*
 import cz.muni.packer.data.Categories
 import cz.muni.packer.data.Item
 import cz.muni.packer.data.PackerList
@@ -39,4 +40,4 @@ fun PackerList.toEntity(): PackerListEntity =
     PackerListEntity(
         id = id,
         name = name
-    )
+    )*/

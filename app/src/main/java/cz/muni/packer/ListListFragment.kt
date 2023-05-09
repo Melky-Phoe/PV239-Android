@@ -20,7 +20,7 @@ class ListListFragment : Fragment() {
     private lateinit var binding: FragmentListListBinding
     private lateinit var adapter: PackerListAdapter
     private val packerListRepository: PackerListRepository by lazy {
-        PackerListRepository(requireContext())
+        PackerListRepository()
     }
     private lateinit var appNavigator: AppNavigator
 
@@ -45,8 +45,9 @@ class ListListFragment : Fragment() {
         }
 
         // Load packer lists and submit them to the adapter
-        val packerLists = packerListRepository.getAllLists()
-        adapter.submitList(packerLists)
+        packerListRepository.getPackerLists { packerLists ->
+            adapter.submitList(packerLists)
+        }
 
         return binding.root
     }
@@ -74,7 +75,16 @@ class ListListFragment : Fragment() {
     }
 
     private fun createNewPackerList(listName: String) {
-        val newPackerList = PackerList(0, name = listName, items = emptyList())
+        val newPackerList = PackerList(id = "", name = listName, items = emptyList())
+
+        // Save the new PackerList to the database
+        packerListRepository.addPackerList(newPackerList)
+
+        // Fetch updated packer lists and submit them to the adapter
+        packerListRepository.getPackerLists { packerLists ->
+            adapter.submitList(packerLists)
+        }
+    /* val newPackerList = PackerList(0, name = listName, items = emptyList())
 
         // Save the new PackerList to the database and get the generated ID
         val generatedPackerListId = packerListRepository.addPackerList(newPackerList)
@@ -85,7 +95,7 @@ class ListListFragment : Fragment() {
         // Update the adapter with the new list
         val newList = adapter.currentList.toMutableList()
         newList.add(newPackerListWithId)
-        adapter.submitList(newList)
+        adapter.submitList(newList)*/
     }
 
 }

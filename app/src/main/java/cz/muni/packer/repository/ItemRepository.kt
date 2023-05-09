@@ -1,5 +1,40 @@
 package cz.muni.packer.repository
 
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import cz.muni.packer.data.Item
+
+class ItemRepository {
+    private val auth = FirebaseAuth.getInstance()
+    private val database = FirebaseDatabase.getInstance().reference
+
+    fun getItems(packerListId: String, callback: (List<Item>) -> Unit) {
+        val userId = auth.currentUser?.uid ?: return
+        database.child("users").child(userId).child("lists").child(packerListId).child("items").get().addOnSuccessListener { dataSnapshot ->
+            val items = dataSnapshot.children.mapNotNull { it.getValue(Item::class.java) }
+            callback(items)
+        }
+    }
+
+    fun addItem(packerListId: String, item: Item) {
+        val userId = auth.currentUser?.uid ?: return
+        database.child("users").child(userId).child("lists").child(packerListId).child("items").push().setValue(item)
+    }
+
+    fun updateItem(packerListId: String, item: Item) {
+        val userId = auth.currentUser?.uid ?: return
+        database.child("users").child(userId).child("lists").child(packerListId).child("items").child(
+            item.id
+        ).setValue(item)
+    }
+
+    fun updateCount(itemId: String, currentCount: Int) {
+        val userId = auth.currentUser?.uid ?: return
+        database.child("users").child(userId).child("items").child(itemId).child("currentCount").setValue(currentCount)
+    }
+}
+
+/*
 import android.content.Context
 import cz.muni.packer.data.Categories
 import cz.muni.packer.data.Item
@@ -43,4 +78,4 @@ class ItemRepository (
         val entities = data.map { it.toEntity() }
         dao.persist(entities)
     }
-}
+}*/

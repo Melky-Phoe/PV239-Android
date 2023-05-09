@@ -1,5 +1,6 @@
 package cz.muni.packer.database.packerlist
 
+/*
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -18,3 +19,4 @@ interface PackerListDao {
     @Query("SELECT * FROM ItemEntity WHERE packerListId = :packerListId")
     fun getItemsForPackerList(packerListId: Long): List<ItemEntity>
 }
+*/

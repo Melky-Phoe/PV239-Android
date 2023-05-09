@@ -1,5 +1,6 @@
 package cz.muni.packer.database.item
 
+/*
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -24,4 +25,4 @@ abstract class ItemDatabase : RoomDatabase() {
 
     abstract fun ItemDao(): ItemDao
     abstract fun PackerListDao(): PackerListDao
-}
+}*/

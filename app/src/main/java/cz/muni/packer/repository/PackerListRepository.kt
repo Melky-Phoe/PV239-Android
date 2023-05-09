@@ -1,5 +1,28 @@
 package cz.muni.packer.repository
 
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import cz.muni.packer.data.PackerList
+
+class PackerListRepository {
+    private val auth = FirebaseAuth.getInstance()
+    private val database = FirebaseDatabase.getInstance().reference
+
+    fun getPackerLists(callback: (List<PackerList>) -> Unit) {
+        val userId = auth.currentUser?.uid ?: return
+        database.child("users").child(userId).child("lists").get().addOnSuccessListener { dataSnapshot ->
+            val packerLists = dataSnapshot.children.mapNotNull { it.getValue(PackerList::class.java) }
+            callback(packerLists)
+        }
+    }
+
+    fun addPackerList(packerList: PackerList) {
+        val userId = auth.currentUser?.uid ?: return
+        database.child("users").child(userId).child("lists").push().setValue(packerList)
+    }
+}
+
+/*
 import android.content.Context
 import cz.muni.packer.data.Item
 import cz.muni.packer.data.PackerList
@@ -39,4 +62,4 @@ class PackerListRepository (
             )
         }
     }
-}
+}*/

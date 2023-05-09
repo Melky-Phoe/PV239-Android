@@ -25,9 +25,10 @@ import cz.muni.packer.repository.ItemRepository
 class ItemAddEditFragment : Fragment() {
     private lateinit var binding: FragmentItemAddEditBinding
     private val args: ItemAddEditFragmentArgs by navArgs()
-    private val itemRepository: ItemRepository by lazy {
+    private val itemRepository = ItemRepository()
+    /*private val itemRepository: ItemRepository by lazy {
         ItemRepository(requireContext())
-    }
+    }*/
     private var _currentCount = 0
 
     private val takePhotoLauncher: ActivityResultLauncher<Intent> =
@@ -96,6 +97,23 @@ class ItemAddEditFragment : Fragment() {
                     else -> Categories.OTHER
                 }
                 val pictureBytes = picture?.let { bitmapToByteArray(it) }
+                val item = Item(
+                    id = args.item?.id ?: "",
+                    name = name,
+                    category = category,
+                    picture = pictureBytes,
+                    currentCount = _currentCount,
+                    totalCount = totalCount,
+                    packerListId = args.packerListId
+                )
+
+                if (args.item != null) {
+                    itemRepository.updateItem(args.packerListId.toString(), item)
+                } else {
+                    itemRepository.addItem(args.packerListId.toString(), item)
+                }
+
+                /*val pictureBytes = picture?.let { bitmapToByteArray(it) }
                 itemRepository.saveOrUpdate(
                     name = name,
                     category = category,
@@ -104,7 +122,7 @@ class ItemAddEditFragment : Fragment() {
                     totalCount = totalCount,
                     id = args.item?.id,
                     packerListId = args.packerListId
-                )
+                )*/
                 findNavController().navigateUp()
             }
         }

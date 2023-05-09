@@ -14,7 +14,7 @@
             app:destination="@id/itemAddEditFragment" />
         <argument
             android:name="packerListId"
-            app:argType="long" />
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/itemAddEditFragment"
@@ -27,8 +27,8 @@
             app:nullable="true"/>
         <argument
             android:name="packerListId"
-            android:defaultValue="0L"
-            app:argType="long"/>
+            android:defaultValue=""
+            app:argType="string"/>
     </fragment>
     <fragment
         android:id="@+id/listListFragment"
