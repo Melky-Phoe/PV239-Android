@@ -26,9 +26,7 @@ class ItemAddEditFragment : Fragment() {
     private lateinit var binding: FragmentItemAddEditBinding
     private val args: ItemAddEditFragmentArgs by navArgs()
     private val itemRepository = ItemRepository()
-    /*private val itemRepository: ItemRepository by lazy {
-        ItemRepository(requireContext())
-    }*/
+
     private var _currentCount = 0
 
     private val takePhotoLauncher: ActivityResultLauncher<Intent> =
@@ -108,21 +106,10 @@ class ItemAddEditFragment : Fragment() {
                 )
 
                 if (args.item != null) {
-                    itemRepository.updateItem(args.packerListId.toString(), item)
+                    itemRepository.updateItem(item)
                 } else {
-                    itemRepository.addItem(args.packerListId.toString(), item)
+                    itemRepository.addItem(item)
                 }
-
-                /*val pictureBytes = picture?.let { bitmapToByteArray(it) }
-                itemRepository.saveOrUpdate(
-                    name = name,
-                    category = category,
-                    picture = pictureBytes,
-                    currentCount = _currentCount,
-                    totalCount = totalCount,
-                    id = args.item?.id,
-                    packerListId = args.packerListId
-                )*/
                 findNavController().navigateUp()
             }
         }

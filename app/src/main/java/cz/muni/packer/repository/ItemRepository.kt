@@ -1,30 +1,51 @@
 package cz.muni.packer.repository
 
+import android.content.ContentValues
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.ktx.Firebase
 import cz.muni.packer.data.Item
 
 class ItemRepository {
+    private val database: DatabaseReference = Firebase.database.reference
     private val auth = FirebaseAuth.getInstance()
-    private val database = FirebaseDatabase.getInstance().reference
 
     fun getItems(packerListId: String, callback: (List<Item>) -> Unit) {
         val userId = auth.currentUser?.uid ?: return
-        database.child("users").child(userId).child("lists").child(packerListId).child("items").get().addOnSuccessListener { dataSnapshot ->
-            val items = dataSnapshot.children.mapNotNull { it.getValue(Item::class.java) }
-            callback(items)
-        }
+
+        database.child("users").child(userId).child("items").addValueEventListener(object: ValueEventListener {
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                val items = snapshot.children.mapNotNull { it.getValue<Item>() }
+                val filteredItems = items.filter { it.packerListId == packerListId }
+                callback(filteredItems)
+                Log.d(ContentValues.TAG, "Value is: $filteredItems")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+            }
+        })
     }
 
-    fun addItem(packerListId: String, item: Item) {
+    fun addItem(item: Item) {
         val userId = auth.currentUser?.uid ?: return
-        database.child("users").child(userId).child("lists").child(packerListId).child("items").push().setValue(item)
+
+        val key = database.child("users").child(userId).child("items").push().key ?: return
+        val updatedItem = item.copy(id = key) // Set the auto-generated ID to the Item's id property
+
+        database.child("users").child(userId).child("items").child(key).setValue(updatedItem)
     }
 
-    fun updateItem(packerListId: String, item: Item) {
+    fun updateItem(item: Item) {
         val userId = auth.currentUser?.uid ?: return
         if (item.id != null) {
-            database.child("users").child(userId).child("lists").child(packerListId).child("items").child(
+            database.child("users").child(userId).child("items").child(
                 item.id
             ).setValue(item)
         }
@@ -35,49 +56,3 @@ class ItemRepository {
         database.child("users").child(userId).child("items").child(itemId).child("currentCount").setValue(currentCount)
     }
 }
-
-/*
-import android.content.Context
-import cz.muni.packer.data.Categories
-import cz.muni.packer.data.Item
-import cz.muni.packer.database.item.ItemDao
-import cz.muni.packer.database.item.ItemDatabase
-import cz.muni.packer.repository.mapper.toAppData
-import cz.muni.packer.repository.mapper.toEntity
-
-class ItemRepository (
-    context: Context,
-    private val dao: ItemDao = ItemDatabase.create(context).ItemDao()
-) {
-
-    fun saveOrUpdate(name: String, category: Categories, picture: ByteArray?, currentCount: Int, totalCount: Int, id: Long? = null, packerListId: Long) {
-        val item = Item(
-            id = id ?: 0,
-            name = name,
-            category = category,
-            picture = picture,
-            currentCount = currentCount,
-            totalCount = totalCount,
-            packerListId = packerListId
-        )
-
-        dao.persist(item.toEntity())
-    }
-
-    fun updateCount(id: Long, currentCount: Int) {
-        dao.updateCount(id = id, count = currentCount)
-    }
-
-    fun getAllItems(): List<Item> =
-        dao.selectAll()
-            .map { it.toAppData() }
-
-    fun getItemsForPackerList(packerListId: Long): List<Item> =
-        dao.getItemsForPackerList(packerListId)
-            .map { it.toAppData() }
-
-    fun saveAll(data: List<Item>) {
-        val entities = data.map { it.toEntity() }
-        dao.persist(entities)
-    }
-}*/

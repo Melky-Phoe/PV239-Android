@@ -40,6 +40,12 @@ class ItemListFragment : Fragment() {
         binding = FragmentItemListBinding.inflate(layoutInflater, container, false)
 
         itemRepository.getItems(args.packerListId) { packerListItems ->
+            // This is added because the app has failed here due to "attempting to access the
+            // context of the ItemListFragment when the fragment is not attached to a context"
+            if (!isAdded) { // Check if the fragment is still added to the activity
+                return@getItems
+            }
+
             val itemMap = packerListItems.groupBy { it.category }
             val categoryItemList = itemMap.map { (category, itemList) ->
                 Category(category?.name ?: "", itemList)
@@ -49,15 +55,6 @@ class ItemListFragment : Fragment() {
             binding.rvItems.layoutManager = LinearLayoutManager(requireContext())
             binding.rvItems.adapter = adapter
         }
-        /*val packerListItems = itemRepository.getItemsForPackerList(args.packerListId)
-        val itemMap = packerListItems.groupBy { it.category }
-        val categoryItemList = itemMap.map { (category, itemList) ->
-            Category(category.name, itemList)
-        }
-
-        adapter = CategoryAdapter(categoryItemList, appNavigator, itemRepository)
-        binding.rvItems.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvItems.adapter = adapter*/
 
         binding.fab.setOnClickListener {
             val action = ItemListFragmentDirections.actionItemListFragmentToItemAddEditFragment(packerListId = args.packerListId)

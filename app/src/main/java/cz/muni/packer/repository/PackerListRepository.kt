@@ -13,8 +13,7 @@ import com.google.firebase.ktx.Firebase
 import cz.muni.packer.data.PackerList
 
 class PackerListRepository {
-    private var database: DatabaseReference = Firebase.database.reference
-
+    private val database: DatabaseReference = Firebase.database.reference
     private val auth = FirebaseAuth.getInstance()
 
     fun getPackerLists(callback: (List<PackerList>) -> Unit) {
@@ -33,12 +32,15 @@ class PackerListRepository {
             override fun onCancelled(error: DatabaseError) {
                 Log.w(TAG, "Failed to read value.", error.toException())
             }
-
         })
     }
 
     fun addPackerList(packerList: PackerList) {
         val userId = auth.currentUser?.uid ?: return
-        database.child("users").child(userId).child("lists").push().setValue(packerList)
+
+        val key = database.child("users").child(userId).child("lists").push().key ?: return
+        val updatedPackerList = packerList.copy(id = key) // Set the auto-generated ID to the PackerList's id property
+
+        database.child("users").child(userId).child("lists").child(key).setValue(updatedPackerList)
     }
 }
