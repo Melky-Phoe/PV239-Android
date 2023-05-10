@@ -1,19 +1,40 @@
 package cz.muni.packer.repository
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.ktx.Firebase
 import cz.muni.packer.data.PackerList
 
 class PackerListRepository {
+    private var database: DatabaseReference = Firebase.database.reference
+
     private val auth = FirebaseAuth.getInstance()
-    private val database = FirebaseDatabase.getInstance().reference
 
     fun getPackerLists(callback: (List<PackerList>) -> Unit) {
         val userId = auth.currentUser?.uid ?: return
-        database.child("users").child(userId).child("lists").get().addOnSuccessListener { dataSnapshot ->
-            val packerLists = dataSnapshot.children.mapNotNull { it.getValue(PackerList::class.java) }
-            callback(packerLists)
-        }
+
+        database.child("users").child(userId).child("lists").addValueEventListener(object: ValueEventListener {
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                val value = snapshot.children.mapNotNull { it.getValue<PackerList>() }
+                callback(value)
+                Log.d(TAG, "Value is: $value")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w(TAG, "Failed to read value.", error.toException())
+            }
+
+        })
     }
 
     fun addPackerList(packerList: PackerList) {
@@ -21,45 +42,3 @@ class PackerListRepository {
         database.child("users").child(userId).child("lists").push().setValue(packerList)
     }
 }
-
-/*
-import android.content.Context
-import cz.muni.packer.data.Item
-import cz.muni.packer.data.PackerList
-import cz.muni.packer.database.item.ItemDatabase
-import cz.muni.packer.database.packerlist.PackerListDao
-import kotlin.collections.List
-import cz.muni.packer.repository.mapper.toAppData
-import cz.muni.packer.repository.mapper.toEntity
-
-class PackerListRepository (
-    context: Context,
-    private val packerListDao: PackerListDao = ItemDatabase.create(context).PackerListDao(),
-    private val itemRepository: ItemRepository = ItemRepository(context)
-) {
-
-    fun getAllLists(): List<PackerList> =
-        packerListDao.getAllPackerLists().map { packerListEntity ->
-            val items = itemRepository.getItemsForPackerList(packerListEntity.id)
-            packerListEntity.toAppData(items)
-        }
-
-    fun addPackerList(packerList: PackerList): Long {
-        val packerListEntity = packerList.toEntity()
-        return packerListDao.insert(packerListEntity)
-    }
-
-    fun addItemsToPackerList(packerListId: Long, items: List<Item>) {
-        items.forEach { item ->
-            itemRepository.saveOrUpdate(
-                name = item.name,
-                category = item.category,
-                picture = item.picture,
-                currentCount = item.currentCount,
-                totalCount = item.totalCount,
-                id = item.id,
-                packerListId = packerListId
-            )
-        }
-    }
-}*/

@@ -132,7 +132,7 @@ class ItemAddEditFragment : Fragment() {
         val item: Item? = args.item
 
         if (item != null) {
-            _currentCount = item.currentCount
+            _currentCount = item.currentCount!!
             binding.itemNameEditText.setText(item.name)
             binding.countEditText.setText(item.totalCount.toString())
             item.picture?.let { binding.imageView.setImageBitmap(byteArrayToBitmap(it)) }
@@ -143,6 +143,7 @@ class ItemAddEditFragment : Fragment() {
                 Categories.FOOD -> binding.categoryChipGroup.check(R.id.food_chip)
                 Categories.ELECTRONICS -> binding.categoryChipGroup.check(R.id.electronics_chip)
                 Categories.OTHER -> binding.categoryChipGroup.check(R.id.other_chip)
+                else -> {}
             }
         }
     }

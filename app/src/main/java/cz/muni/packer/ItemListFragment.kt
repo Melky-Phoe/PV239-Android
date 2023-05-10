@@ -42,7 +42,7 @@ class ItemListFragment : Fragment() {
         itemRepository.getItems(args.packerListId) { packerListItems ->
             val itemMap = packerListItems.groupBy { it.category }
             val categoryItemList = itemMap.map { (category, itemList) ->
-                Category(category.name, itemList)
+                Category(category?.name ?: "", itemList)
             }
 
             adapter = CategoryAdapter(categoryItemList, appNavigator, itemRepository)

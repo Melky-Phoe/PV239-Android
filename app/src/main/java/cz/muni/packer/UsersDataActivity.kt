@@ -46,8 +46,10 @@ class UsersDataActivity : AppCompatActivity(), AppNavigator {
     }
 
     override fun navigateToItemList(packerList: PackerList) {
-        val action = ListListFragmentDirections.actionListListFragmentToItemListFragment(packerList.id)
-        findNavController(R.id.nav_host_fragment).navigate(action)
+        if (packerList.id != null) {
+            val action = ListListFragmentDirections.actionListListFragmentToItemListFragment(packerList.id)
+            findNavController(R.id.nav_host_fragment).navigate(action)
+        }
     }
 
     override fun navigateToItemDetails(item: Item) {

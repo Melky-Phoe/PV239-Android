@@ -32,7 +32,7 @@ class ItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var _item: Item
-    private var _currentCount: Int = 0
+    private var _currentCount: Int? = 0
         set(value) {
             field = value
             _item.currentCount = value
@@ -56,8 +56,8 @@ class ItemViewHolder(
 
         item.picture?.let { bindPicture(it) }
         binding.plusButton.setOnClickListener {
-            if (item.currentCount < item.totalCount) {
-                _currentCount++
+            if (item.currentCount!! < item.totalCount!!) {
+                _currentCount = _currentCount!! + 1
                 onCountUpdate(item)
             }
         }
@@ -67,8 +67,8 @@ class ItemViewHolder(
                 binding.checkBox.isEnabled = true
                 binding.checkBox.isChecked = false
             }
-            if (item.currentCount > 0) {
-                _currentCount--
+            if (item.currentCount!! > 0) {
+                _currentCount = _currentCount!! - 1
                 onCountUpdate(item)
             }
         }

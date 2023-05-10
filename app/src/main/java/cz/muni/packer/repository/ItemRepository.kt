@@ -23,9 +23,11 @@ class ItemRepository {
 
     fun updateItem(packerListId: String, item: Item) {
         val userId = auth.currentUser?.uid ?: return
-        database.child("users").child(userId).child("lists").child(packerListId).child("items").child(
-            item.id
-        ).setValue(item)
+        if (item.id != null) {
+            database.child("users").child(userId).child("lists").child(packerListId).child("items").child(
+                item.id
+            ).setValue(item)
+        }
     }
 
     fun updateCount(itemId: String, currentCount: Int) {

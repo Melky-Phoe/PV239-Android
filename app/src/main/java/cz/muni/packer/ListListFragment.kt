@@ -84,18 +84,5 @@ class ListListFragment : Fragment() {
         packerListRepository.getPackerLists { packerLists ->
             adapter.submitList(packerLists)
         }
-    /* val newPackerList = PackerList(0, name = listName, items = emptyList())
-
-        // Save the new PackerList to the database and get the generated ID
-        val generatedPackerListId = packerListRepository.addPackerList(newPackerList)
-
-        // Create a new PackerList with the generated ID
-        val newPackerListWithId = newPackerList.copy(id = generatedPackerListId)
-
-        // Update the adapter with the new list
-        val newList = adapter.currentList.toMutableList()
-        newList.add(newPackerListWithId)
-        adapter.submitList(newList)*/
     }
-
 }
