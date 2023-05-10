@@ -53,12 +53,12 @@ class UsersDataActivity : AppCompatActivity(), AppNavigator {
     }
 
     override fun navigateToItemDetails(item: Item) {
-        val action = ItemListFragmentDirections.actionItemListFragmentToItemAddEditFragment(item)
+        val action = ItemListFragmentDirections.actionItemListFragmentToItemAddEditFragment(item, item.packerListId ?: "")
         findNavController(R.id.nav_host_fragment).navigate(action)
     }
 
     fun signOut() {
         firebaseAuth.signOut()
-        //navigateToSignInActivity()
+        checkUser()
     }
 }

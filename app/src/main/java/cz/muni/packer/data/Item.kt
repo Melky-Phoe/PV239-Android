@@ -34,10 +34,7 @@ data class Item(
         if (id != other.id) return false
         if (name != other.name) return false
         if (category != other.category) return false
-        if (picture != null) {
-            if (other.picture == null) return false
-            if (!picture.contentEquals(other.picture)) return false
-        } else if (other.picture != null) return false
+        if (picture != other.picture) return false
         if (currentCount != other.currentCount) return false
         if (totalCount != other.totalCount) return false
         if (packerListId != other.packerListId) return false

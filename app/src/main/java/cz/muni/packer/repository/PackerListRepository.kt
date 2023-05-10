@@ -39,7 +39,7 @@ class PackerListRepository {
         val userId = auth.currentUser?.uid ?: return
 
         val key = database.child("users").child(userId).child("lists").push().key ?: return
-        val updatedPackerList = packerList.copy(id = key) // Set the auto-generated ID to the PackerList's id property
+        val updatedPackerList = packerList.copy(id = key)
 
         database.child("users").child(userId).child("lists").child(key).setValue(updatedPackerList)
     }

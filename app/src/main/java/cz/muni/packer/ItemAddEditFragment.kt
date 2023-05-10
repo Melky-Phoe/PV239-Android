@@ -114,7 +114,8 @@ class ItemAddEditFragment : Fragment() {
                                 itemRepository.updateItem(item)
                             } else {
                                 itemRepository.addItem(item)
-                            }                        },
+                            }
+                        },
                         onFailure = { exception ->
                             Log.e("ItemAddEditFragment", "Error uploading image", exception)
                             // Handle the error

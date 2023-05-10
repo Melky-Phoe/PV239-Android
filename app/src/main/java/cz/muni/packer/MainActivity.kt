@@ -100,6 +100,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 // Start UsersDataActivity
+                Toast.makeText(this@MainActivity, "Log In was Successful", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this@MainActivity, UsersDataActivity::class.java))
                 finish()
             }
