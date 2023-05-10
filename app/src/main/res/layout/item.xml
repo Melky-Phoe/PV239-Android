@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="65dp"
-    tools:context=".ItemFragment">
+    android:layout_height="65dp" >
 
     <ImageView
         android:id="@+id/imageItem"
@@ -14,7 +13,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/checkBox"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/baseline_backpack_24" />
+        android:src="@drawable/baseline_backpack_24"
+        android:contentDescription="@string/item_picture_description" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"

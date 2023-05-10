@@ -6,8 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
 import cz.muni.packer.data.Item
-import cz.muni.packer.data.byteArrayToBitmap
+import cz.muni.packer.data.loadImageFromFirebase
 import cz.muni.packer.databinding.ItemBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ItemAdapter(
     private val onItemClick: (Item) -> Unit, private val onCountUpdate: (Item) -> Unit,
@@ -90,9 +93,15 @@ class ItemViewHolder(
         }
     }
 
-    private fun bindPicture(pictureBytes: ByteArray) {
-        val picture = byteArrayToBitmap(pictureBytes)
-        binding.imageItem.setImageBitmap(picture)
+    private fun bindPicture(pictureUrl: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val picture = loadImageFromFirebase(pictureUrl)
+            picture?.let {
+                CoroutineScope(Dispatchers.Main).launch {
+                    binding.imageItem.setImageBitmap(it)
+                }
+            }
+        }
     }
 }
 

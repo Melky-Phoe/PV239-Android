@@ -1,13 +1,20 @@
 package cz.muni.packer.repository
 
 import android.content.ContentValues
+import android.graphics.Bitmap
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import cz.muni.packer.data.Item
+import java.io.ByteArrayOutputStream
+import java.util.UUID
 
 class ItemRepository {
     private val database: DatabaseReference = Firebase.database.reference
@@ -54,5 +61,27 @@ class ItemRepository {
     fun updateCount(itemId: String, currentCount: Int) {
         val userId = auth.currentUser?.uid ?: return
         database.child("users").child(userId).child("items").child(itemId).child("currentCount").setValue(currentCount)
+    }
+
+
+    fun uploadImageToFirebaseStorage(bitmap: Bitmap, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) {
+        val storage = Firebase.storage
+        val storageRef = storage.reference
+        val imagesRef = storageRef.child("images/${UUID.randomUUID()}.png")
+
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val data = baos.toByteArray()
+
+        val uploadTask = imagesRef.putBytes(data)
+        uploadTask.addOnSuccessListener {
+            imagesRef.downloadUrl.addOnSuccessListener { uri ->
+                onSuccess(uri.toString())
+            }.addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+        }.addOnFailureListener { exception ->
+            onFailure(exception)
+        }
     }
 }
