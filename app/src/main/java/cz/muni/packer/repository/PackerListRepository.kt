@@ -43,4 +43,45 @@ class PackerListRepository {
 
         database.child("users").child(userId).child("lists").child(key).setValue(updatedPackerList)
     }
+
+    fun updatePackerList(packerList: PackerList) {
+        val userId = auth.currentUser?.uid ?: return
+        if (packerList.id != null) {
+            database.child("users").child(userId).child("lists").child(
+                packerList.id
+            ).setValue(packerList)
+        }
+    }
+
+    fun deletePackerList(packerListId: String) {
+        val userId = auth.currentUser?.uid ?: return
+
+        database.child("users").child(userId).child("lists").child(packerListId).removeValue()
+            .addOnSuccessListener {
+                // Delete items that have a .packerListId property matching packerListId
+                deleteItemsWithPackerListId(packerListId)
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Failed to delete packerList with packerListId $packerListId", exception)
+            }
+    }
+
+    private fun deleteItemsWithPackerListId(packerListId: String) {
+        val userId = auth.currentUser?.uid ?: return
+
+        database.child("users").child(userId).child("items")
+            .orderByChild("packerListId")
+            .equalTo(packerListId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach { itemSnapshot ->
+                        itemSnapshot.ref.removeValue()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.w(TAG, "Failed to delete items with packerListId $packerListId", error.toException())
+                }
+            })
+    }
 }

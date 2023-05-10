@@ -23,21 +23,22 @@ class ItemRepository {
     fun getItems(packerListId: String, callback: (List<Item>) -> Unit) {
         val userId = auth.currentUser?.uid ?: return
 
-        database.child("users").child(userId).child("items").addValueEventListener(object: ValueEventListener {
+        database.child("users").child(userId).child("items")
+            .addValueEventListener(object : ValueEventListener {
 
-            override fun onDataChange(snapshot: DataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                val items = snapshot.children.mapNotNull { it.getValue<Item>() }
-                val filteredItems = items.filter { it.packerListId == packerListId }
-                callback(filteredItems)
-                Log.d(ContentValues.TAG, "Value is: $filteredItems")
-            }
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    val items = snapshot.children.mapNotNull { it.getValue<Item>() }
+                    val filteredItems = items.filter { it.packerListId == packerListId }
+                    callback(filteredItems)
+                    Log.d(ContentValues.TAG, "Value is: $filteredItems")
+                }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+                }
+            })
     }
 
     fun addItem(item: Item) {
@@ -60,11 +61,24 @@ class ItemRepository {
 
     fun updateCount(itemId: String, currentCount: Int) {
         val userId = auth.currentUser?.uid ?: return
-        database.child("users").child(userId).child("items").child(itemId).child("currentCount").setValue(currentCount)
+        database.child("users").child(userId).child("items").child(itemId).child("currentCount")
+            .setValue(currentCount)
     }
 
+    fun deleteItem(itemId: String) {
+        val userId = auth.currentUser?.uid ?: return
 
-    fun uploadImageToFirebaseStorage(bitmap: Bitmap, onSuccess: (String) -> Unit, onFailure: (Exception) -> Unit) {
+        database.child("users").child(userId).child("items").child(itemId).removeValue()
+            .addOnFailureListener { exception ->
+                Log.w(ContentValues.TAG, "Failed to delete.", exception)
+            }
+    }
+
+    fun uploadImageToFirebaseStorage(
+        bitmap: Bitmap,
+        onSuccess: (String) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         val storage = Firebase.storage
         val storageRef = storage.reference
         val imagesRef = storageRef.child("images/${UUID.randomUUID()}.png")
