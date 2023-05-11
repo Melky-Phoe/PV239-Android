@@ -51,6 +51,22 @@ class ListListFragment : Fragment() {
             showAddEditPackerListDialog("Add New Packer List", "Create")
         }
 
+        binding.logoutButton.setOnClickListener {
+            val builder = context?.let { it1 -> androidx.appcompat.app.AlertDialog.Builder(it1) }
+            if (builder != null) {
+                builder.setTitle("Are you sure?")
+                builder.setMessage("Do you want to LogOut?")
+                builder.setPositiveButton("Yes") { _, _ ->
+                    appNavigator.signOut()
+                }
+                builder.setNegativeButton("No") { _, _ ->
+                    // Do nothing
+                }
+                val dialog = builder.create()
+                dialog.show()
+            }
+        }
+
         // Load packer lists and submit them to the adapter
         packerListRepository.getPackerLists { packerLists ->
             adapter.submitList(packerLists)
@@ -91,7 +107,7 @@ class ListListFragment : Fragment() {
                     Toast.makeText(this.context, "Name cannot be empty", Toast.LENGTH_SHORT).show()
                 }
             }
-            .setNegativeButton("Delete") { i, n ->
+            .setNegativeButton("Delete") { _, _ ->
                 if (packerList != null) {
                     val builder = context?.let { AlertDialog.Builder(it) }
                     if (builder != null) {

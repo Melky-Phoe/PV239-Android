@@ -2,11 +2,12 @@ package cz.muni.packer
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import cz.muni.packer.data.Item
 import cz.muni.packer.data.PackerList
@@ -29,6 +30,7 @@ class UsersDataActivity : AppCompatActivity(), AppNavigator {
         val navController = findNavController(R.id.nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
+
     }
 
     private fun checkUser() {
@@ -57,8 +59,9 @@ class UsersDataActivity : AppCompatActivity(), AppNavigator {
         findNavController(R.id.nav_host_fragment).navigate(action)
     }
 
-    fun signOut() {
+    override fun signOut() {
         firebaseAuth.signOut()
+        GoogleSignIn.getClient(this, GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()).signOut()
         checkUser()
     }
 }

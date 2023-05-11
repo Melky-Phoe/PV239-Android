@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -56,10 +55,27 @@ class ItemListFragment : Fragment() {
             binding.rvItems.adapter = adapter
         }
 
-        binding.fab.setOnClickListener {
+        binding.addItemButton.setOnClickListener {
             val action = ItemListFragmentDirections.actionItemListFragmentToItemAddEditFragment(packerListId = args.packerListId)
             findNavController().navigate(action)
         }
+
+        binding.logoutButton.setOnClickListener {
+            val builder = context?.let { it1 -> androidx.appcompat.app.AlertDialog.Builder(it1) }
+            if (builder != null) {
+                builder.setTitle("Are you sure?")
+                builder.setMessage("Do you want to LogOut?")
+                builder.setPositiveButton("Yes") { _, _ ->
+                    appNavigator.signOut()
+                }
+                builder.setNegativeButton("No") { _, _ ->
+                    // Do nothing
+                }
+                val dialog = builder.create()
+                dialog.show()
+            }
+        }
+
         // TODO: change title to list name
         // activity?.findViewById<Toolbar>(R.id.toolbar)?.title = args.packerListId.toString()
 

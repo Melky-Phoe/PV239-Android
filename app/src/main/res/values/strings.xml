@@ -37,4 +37,12 @@
     <string name="food_chip">Food</string>
     <string name="electronics_chip">Electronics</string>
     <string name="other_chip">Other</string>
+
+    <string name="sign_in_header">Sign in</string>
+    <string name="username_editText">UserName</string>
+    <string name="password_editText">Password</string>
+    <string name="login_button">LOGIN</string>
+    <string name="singIn_opt_textView">Please Sign In with your Google account</string>
+    <string name="logout_button_description">LogOut Button</string>
+    <string name="add_item_button_description">Add Item Button</string>
 </resources>

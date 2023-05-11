@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/itemListFragment"
         android:name="cz.muni.packer.ItemListFragment"
-        android:label="List items"
+        android:label="List Items"
         tools:layout="@layout/fragment_item_list" >
         <action
             android:id="@+id/action_itemListFragment_to_itemAddEditFragment"
@@ -33,7 +33,7 @@
     <fragment
         android:id="@+id/listListFragment"
         android:name="cz.muni.packer.ListListFragment"
-        android:label="My lists"
+        android:label="My Lists"
         tools:layout="@layout/fragment_list_list" >
         <action
             android:id="@+id/action_listListFragment_to_itemListFragment"
