@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "689361736389-vd2s7mq6i3078e9pinmh945niton4m82.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cz.muni.packer",
+            "certificate_hash": "a340b81ae30bce216667e607dff3be9b2066b450"
+          }
+        },
+        {
           "client_id": "689361736389-9f2mefsijeo631bve675l4jp4cdbetes.apps.googleusercontent.com",
           "client_type": 3
         }
