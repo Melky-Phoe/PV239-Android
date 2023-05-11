@@ -10,6 +10,7 @@ import cz.muni.packer.databinding.ListBinding
 
 class PackerListAdapter(
     private val onItemClick: (PackerList) -> Unit,
+    private val onLongItemClick: (PackerList) -> Unit
 ) : ListAdapter<PackerList, PackerListViewHolder>(PackerListDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PackerListViewHolder =
         PackerListViewHolder(
@@ -17,18 +18,23 @@ class PackerListAdapter(
         )
 
     override fun onBindViewHolder(holder: PackerListViewHolder, position: Int) =
-        holder.bind(getItem(position), onItemClick)
+        holder.bind(getItem(position), onItemClick, onLongItemClick)
 }
 
 class PackerListViewHolder(
     private val binding: ListBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(packerList: PackerList, onItemClick: (PackerList) -> Unit) {
+    fun bind(packerList: PackerList, onItemClick: (PackerList) -> Unit, onLongItemClick: (PackerList) -> Unit) {
         binding.tvListTitle.text = packerList.name
 
         binding.root.setOnClickListener {
             onItemClick(packerList)
+        }
+
+        binding.root.setOnLongClickListener {
+            onLongItemClick(packerList)
+            true
         }
     }
 }

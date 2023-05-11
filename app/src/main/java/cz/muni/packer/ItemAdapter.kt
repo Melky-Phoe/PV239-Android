@@ -13,7 +13,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ItemAdapter(
-    private val onItemClick: (Item) -> Unit, private val onCountUpdate: (Item) -> Unit,
+    private val onItemClick: (Item) -> Unit,
+    private val onCountUpdate: (Item) -> Unit,
 ) : ListAdapter<Item, ItemViewHolder>(ItemDiffUtil()) {
     interface UpdateListener {
         fun onCurrentCountUpdate(item: Item)

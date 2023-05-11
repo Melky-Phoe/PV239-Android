@@ -34,14 +34,19 @@ class ListListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentListListBinding.inflate(layoutInflater, container, false)
-        adapter = PackerListAdapter {
-            showListItems(it)
-        }
+        adapter = PackerListAdapter (
+            onItemClick = { packerList ->
+                showListItems(packerList)
+            },
+            onLongItemClick = {packerList ->
+                onLongItemClick(packerList)
+            }
+        )
         binding.rvItems.layoutManager = LinearLayoutManager(requireContext())
         binding.rvItems.adapter = adapter
 
         binding.addListButton.setOnClickListener {
-            showAddPackerListDialog()
+            showAddEditPackerListDialog("Add New Packer List", "Create")
         }
 
         // Load packer lists and submit them to the adapter
@@ -56,17 +61,29 @@ class ListListFragment : Fragment() {
         appNavigator.navigateToItemList(packerList)
     }
 
-    private fun showAddPackerListDialog() {
+    private fun onLongItemClick(packerList: PackerList) {
+        showAddEditPackerListDialog("Edit Packer List", "Edit", packerList)
+    }
+
+    private fun showAddEditPackerListDialog(actionString: String, buttonString: String, packerList: PackerList? = null) {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.new_packer_list_dialog, null)
         val listNameEditText = dialogView.findViewById<EditText>(R.id.et_list_name)
+        if (packerList?.name != null) {
+            listNameEditText.setText(packerList.name)
+        }
 
         AlertDialog.Builder(requireActivity())
-            .setTitle("Add New Packer List")
+            .setTitle(actionString)
             .setView(dialogView)
-            .setPositiveButton("Create") { _, _ ->
+            .setPositiveButton(buttonString) { _, _ ->
                 val listName = listNameEditText.text.toString().trim()
                 if (listName.isNotEmpty()) {
-                    createNewPackerList(listName)
+                    if (packerList == null) {
+                        createNewPackerList(listName)
+                    }
+                    else {
+                        editPackerList(packerList, listName)
+                    }
                 }
             }
             .setNegativeButton("Cancel", null)
@@ -79,6 +96,18 @@ class ListListFragment : Fragment() {
 
         // Save the new PackerList to the database
         packerListRepository.addPackerList(newPackerList)
+
+        // Fetch updated packer lists and submit them to the adapter
+        packerListRepository.getPackerLists { packerLists ->
+            adapter.submitList(packerLists)
+        }
+    }
+
+    private fun editPackerList(packerList: PackerList, listName: String) {
+        val newPackerList = packerList.copy(name = listName)
+
+        // Update the PackerList in the database
+        packerListRepository.updatePackerList(newPackerList)
 
         // Fetch updated packer lists and submit them to the adapter
         packerListRepository.getPackerLists { packerLists ->
