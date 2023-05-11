@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.packer.data.PackerList
 import cz.muni.packer.databinding.FragmentListListBinding
@@ -85,8 +87,30 @@ class ListListFragment : Fragment() {
                         editPackerList(packerList, listName)
                     }
                 }
+                else {
+                    Toast.makeText(this.context, "Name cannot be empty", Toast.LENGTH_SHORT).show()
+                }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Delete") { i, n ->
+                if (packerList != null) {
+                    val builder = context?.let { AlertDialog.Builder(it) }
+                    if (builder != null) {
+                        builder.setTitle("Are you sure?")
+                        builder.setMessage("Do you want to delete this Packer List? " +
+                                            "It will delete all items under this list.")
+                        builder.setPositiveButton("Yes") { _, _ ->
+                            packerList.id?.let { packerListRepository.deletePackerList(packerListId = it) }
+                            findNavController().navigateUp()
+                        }
+                        builder.setNegativeButton("No") { _, _ ->
+                            // Do nothing
+                        }
+                        val dialog = builder.create()
+                        dialog.show()
+                    }
+                }
+            }
+            .setNeutralButton("Cancel", null)
             .create()
             .show()
     }
