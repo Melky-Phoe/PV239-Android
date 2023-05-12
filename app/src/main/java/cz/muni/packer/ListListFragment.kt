@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.packer.data.PackerList
 import cz.muni.packer.databinding.FragmentListListBinding
@@ -20,7 +22,7 @@ class ListListFragment : Fragment() {
     private lateinit var binding: FragmentListListBinding
     private lateinit var adapter: PackerListAdapter
     private val packerListRepository: PackerListRepository by lazy {
-        PackerListRepository(requireContext())
+        PackerListRepository()
     }
     private lateinit var appNavigator: AppNavigator
 
@@ -34,19 +36,41 @@ class ListListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentListListBinding.inflate(layoutInflater, container, false)
-        adapter = PackerListAdapter {
-            showListItems(it)
-        }
+        adapter = PackerListAdapter (
+            onItemClick = { packerList ->
+                showListItems(packerList)
+            },
+            onLongItemClick = {packerList ->
+                onLongItemClick(packerList)
+            }
+        )
         binding.rvItems.layoutManager = LinearLayoutManager(requireContext())
         binding.rvItems.adapter = adapter
 
         binding.addListButton.setOnClickListener {
-            showAddPackerListDialog()
+            showAddEditPackerListDialog("Add New Packer List", "Create")
+        }
+
+        binding.logoutButton.setOnClickListener {
+            val builder = context?.let { it1 -> androidx.appcompat.app.AlertDialog.Builder(it1) }
+            if (builder != null) {
+                builder.setTitle("Are you sure?")
+                builder.setMessage("Do you want to LogOut?")
+                builder.setPositiveButton("Yes") { _, _ ->
+                    appNavigator.signOut()
+                }
+                builder.setNegativeButton("No") { _, _ ->
+                    // Do nothing
+                }
+                val dialog = builder.create()
+                dialog.show()
+            }
         }
 
         // Load packer lists and submit them to the adapter
-        val packerLists = packerListRepository.getAllLists()
-        adapter.submitList(packerLists)
+        packerListRepository.getPackerLists { packerLists ->
+            adapter.submitList(packerLists)
+        }
 
         return binding.root
     }
@@ -55,37 +79,79 @@ class ListListFragment : Fragment() {
         appNavigator.navigateToItemList(packerList)
     }
 
-    private fun showAddPackerListDialog() {
+    private fun onLongItemClick(packerList: PackerList) {
+        showAddEditPackerListDialog("Edit Packer List", "Edit", packerList)
+    }
+
+    private fun showAddEditPackerListDialog(actionString: String, buttonString: String, packerList: PackerList? = null) {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.new_packer_list_dialog, null)
         val listNameEditText = dialogView.findViewById<EditText>(R.id.et_list_name)
+        if (packerList?.name != null) {
+            listNameEditText.setText(packerList.name)
+        }
 
         AlertDialog.Builder(requireActivity())
-            .setTitle("Add New Packer List")
+            .setTitle(actionString)
             .setView(dialogView)
-            .setPositiveButton("Create") { _, _ ->
+            .setPositiveButton(buttonString) { _, _ ->
                 val listName = listNameEditText.text.toString().trim()
                 if (listName.isNotEmpty()) {
-                    createNewPackerList(listName)
+                    if (packerList == null) {
+                        createNewPackerList(listName)
+                    }
+                    else {
+                        editPackerList(packerList, listName)
+                    }
+                }
+                else {
+                    Toast.makeText(this.context, "Name cannot be empty", Toast.LENGTH_SHORT).show()
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Delete") { _, _ ->
+                if (packerList != null) {
+                    val builder = context?.let { AlertDialog.Builder(it) }
+                    if (builder != null) {
+                        builder.setTitle("Are you sure?")
+                        builder.setMessage("Do you want to delete this Packer List? " +
+                                            "It will delete all items under this list.")
+                        builder.setPositiveButton("Yes") { _, _ ->
+                            packerList.id?.let { packerListRepository.deletePackerList(packerListId = it) }
+                            findNavController().navigateUp()
+                        }
+                        builder.setNegativeButton("No") { _, _ ->
+                            // Do nothing
+                        }
+                        val dialog = builder.create()
+                        dialog.show()
+                    }
+                }
+            }
+            .setNeutralButton("Cancel", null)
             .create()
             .show()
     }
 
     private fun createNewPackerList(listName: String) {
-        val newPackerList = PackerList(0, name = listName, items = emptyList())
+        val newPackerList = PackerList(id = "", name = listName, items = emptyList())
 
-        // Save the new PackerList to the database and get the generated ID
-        val generatedPackerListId = packerListRepository.addPackerList(newPackerList)
+        // Save the new PackerList to the database
+        packerListRepository.addPackerList(newPackerList)
 
-        // Create a new PackerList with the generated ID
-        val newPackerListWithId = newPackerList.copy(id = generatedPackerListId)
-
-        // Update the adapter with the new list
-        val newList = adapter.currentList.toMutableList()
-        newList.add(newPackerListWithId)
-        adapter.submitList(newList)
+        // Fetch updated packer lists and submit them to the adapter
+        packerListRepository.getPackerLists { packerLists ->
+            adapter.submitList(packerLists)
+        }
     }
 
+    private fun editPackerList(packerList: PackerList, listName: String) {
+        val newPackerList = packerList.copy(name = listName)
+
+        // Update the PackerList in the database
+        packerListRepository.updatePackerList(newPackerList)
+
+        // Fetch updated packer lists and submit them to the adapter
+        packerListRepository.getPackerLists { packerLists ->
+            adapter.submitList(packerLists)
+        }
+    }
 }

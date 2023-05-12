@@ -7,14 +7,14 @@
     <fragment
         android:id="@+id/itemListFragment"
         android:name="cz.muni.packer.ItemListFragment"
-        android:label="List items"
+        android:label="List Items"
         tools:layout="@layout/fragment_item_list" >
         <action
             android:id="@+id/action_itemListFragment_to_itemAddEditFragment"
             app:destination="@id/itemAddEditFragment" />
         <argument
             android:name="packerListId"
-            app:argType="long" />
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/itemAddEditFragment"
@@ -27,13 +27,13 @@
             app:nullable="true"/>
         <argument
             android:name="packerListId"
-            android:defaultValue="0L"
-            app:argType="long"/>
+            android:defaultValue=""
+            app:argType="string"/>
     </fragment>
     <fragment
         android:id="@+id/listListFragment"
         android:name="cz.muni.packer.ListListFragment"
-        android:label="My lists"
+        android:label="My Lists"
         tools:layout="@layout/fragment_list_list" >
         <action
             android:id="@+id/action_listListFragment_to_itemListFragment"

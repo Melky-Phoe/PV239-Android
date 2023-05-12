@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,17 +19,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import cz.muni.packer.data.Item
 import cz.muni.packer.data.Categories
-import cz.muni.packer.data.bitmapToByteArray
-import cz.muni.packer.data.byteArrayToBitmap
+import cz.muni.packer.data.loadImageFromFirebase
 import cz.muni.packer.databinding.FragmentItemAddEditBinding
 import cz.muni.packer.repository.ItemRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ItemAddEditFragment : Fragment() {
     private lateinit var binding: FragmentItemAddEditBinding
     private val args: ItemAddEditFragmentArgs by navArgs()
-    private val itemRepository: ItemRepository by lazy {
-        ItemRepository(requireContext())
-    }
+    private val itemRepository = ItemRepository()
+
     private var _currentCount = 0
 
     private val takePhotoLauncher: ActivityResultLauncher<Intent> =
@@ -96,16 +98,47 @@ class ItemAddEditFragment : Fragment() {
                     R.id.hygiene_chip -> Categories.HYGIENE
                     else -> Categories.OTHER
                 }
-                val pictureBytes = picture?.let { bitmapToByteArray(it) }
-                itemRepository.saveOrUpdate(
-                    name = name,
-                    category = category,
-                    picture = pictureBytes,
-                    currentCount = _currentCount,
-                    totalCount = totalCount,
-                    id = args.item?.id,
-                    packerListId = args.packerListId
-                )
+
+                if (picture != null) {
+                    itemRepository.uploadImageToFirebaseStorage(picture,
+                        onSuccess = { imageUrl ->
+                            val item = Item(
+                                id = args.item?.id ?: "",
+                                name = name,
+                                category = category,
+                                picture = imageUrl,
+                                currentCount = _currentCount,
+                                totalCount = totalCount,
+                                packerListId = args.packerListId
+                            )
+                            if (args.item != null) {
+                                itemRepository.updateItem(item)
+                            } else {
+                                itemRepository.addItem(item)
+                            }
+                        },
+                        onFailure = { exception ->
+                            Log.e("ItemAddEditFragment", "Error uploading image", exception)
+                            // Handle the error
+                        }
+                    )
+                }
+                else {
+                    val item = Item(
+                        id = args.item?.id ?: "",
+                        name = name,
+                        category = category,
+                        currentCount = _currentCount,
+                        totalCount = totalCount,
+                        packerListId = args.packerListId
+                    )
+
+                    if (args.item != null) {
+                        itemRepository.updateItem(item)
+                    } else {
+                        itemRepository.addItem(item)
+                    }
+                }
                 findNavController().navigateUp()
             }
         }
@@ -114,11 +147,11 @@ class ItemAddEditFragment : Fragment() {
             if (builder != null) {
                 builder.setTitle("Are you sure?")
                 builder.setMessage("Do you want to delete this item?")
-                builder.setPositiveButton("Yes") { dialog, which ->
-                    args.item?.id?.let { it1 -> itemRepository.deleteById(it1) }
+                builder.setPositiveButton("Yes") { _, _ ->
+                    args.item?.id?.let { it1 -> itemRepository.deleteItem(it1) }
                     findNavController().navigateUp()
                 }
-                builder.setNegativeButton("No") { dialog, which ->
+                builder.setNegativeButton("No") { _, _ ->
                     // Do nothing
                 }
                 val dialog = builder.create()
@@ -132,10 +165,19 @@ class ItemAddEditFragment : Fragment() {
         val item: Item? = args.item
 
         if (item != null) {
-            _currentCount = item.currentCount
+            _currentCount = item.currentCount!!
             binding.itemNameEditText.setText(item.name)
             binding.countEditText.setText(item.totalCount.toString())
-            item.picture?.let { binding.imageView.setImageBitmap(byteArrayToBitmap(it)) }
+            item.picture?.let {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val bitmap = loadImageFromFirebase(it)
+                    bitmap?.let { bmp ->
+                        CoroutineScope(Dispatchers.Main).launch {
+                            binding.imageView.setImageBitmap(bmp)
+                        }
+                    }
+                }
+            }
             when (item.category) {
                 Categories.CLOTHING -> binding.categoryChipGroup.check(R.id.clothing_chip)
                 Categories.HYGIENE -> binding.categoryChipGroup.check(R.id.hygiene_chip)
@@ -143,6 +185,7 @@ class ItemAddEditFragment : Fragment() {
                 Categories.FOOD -> binding.categoryChipGroup.check(R.id.food_chip)
                 Categories.ELECTRONICS -> binding.categoryChipGroup.check(R.id.electronics_chip)
                 Categories.OTHER -> binding.categoryChipGroup.check(R.id.other_chip)
+                else -> {}
             }
         }
     }

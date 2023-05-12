@@ -120,40 +120,40 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Clothing" />
+            android:text="@string/clothing_chip" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/hygiene_chip"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hygiene" />
+            android:text="@string/hygiene_chip" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/sleeping_chip"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sleeping" />
+            android:text="@string/sleeping_chip" />
         <com.google.android.material.chip.Chip
             android:id="@+id/food_chip"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Food" />
+            android:text="@string/food_chip" />
         <com.google.android.material.chip.Chip
             android:id="@+id/electronics_chip"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Electronics" />
+            android:text="@string/electronics_chip" />
         <com.google.android.material.chip.Chip
             android:id="@+id/other_chip"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Other" />
+            android:text="@string/other_chip" />
 
     </com.google.android.material.chip.ChipGroup>
 
@@ -179,7 +179,7 @@
         android:layout_marginBottom="12dp"
         android:backgroundTint="@color/red"
         android:text="@string/delete"
-        android:drawableRight="@android:drawable/ic_menu_delete"
+        android:drawableEnd="@android:drawable/ic_menu_delete"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/saveButton"
         app:layout_constraintBottom_toBottomOf="parent" />

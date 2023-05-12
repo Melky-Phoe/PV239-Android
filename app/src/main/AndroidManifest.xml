@@ -17,6 +17,12 @@
             android:value="https://packer-26f54-default-rtdb.firebaseio.com/" />
 
         <activity
+            android:name=".UsersDataActivity"
+            android:exported="false"
+            android:label="@string/title_activity_users_data"
+            android:theme="@style/Theme.MyApplication.NoActionBar" />
+
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.MyApplication">

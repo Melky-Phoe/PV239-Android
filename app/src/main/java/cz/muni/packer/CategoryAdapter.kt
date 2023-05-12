@@ -63,7 +63,9 @@ class CategoryViewHolder(
     }
 
     private fun updateItemCount(item: Item) {
-        itemRepository.updateCount(item.id, item.currentCount)
+        if (item.id != null && item.currentCount != null) {
+            itemRepository.updateCount(item.id, item.currentCount ?: 0)
+        }
     }
 }
 

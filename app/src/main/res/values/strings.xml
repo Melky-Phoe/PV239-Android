@@ -14,6 +14,7 @@
     <string name="total_item_count">Total Item count</string>
     <string name="category">Category</string>
     <string name="save_button">Save</string>
+    <string name="delete">Delete</string>
     <string name="image">Image</string>
     <string name="open_gallery_button">Open Gallery</string>
     <string name="open_camera_button">Open Camera</string>
@@ -23,5 +24,25 @@
     <string name="item_name">Item Name</string>
     <string name="item_picture_description">Item Picture</string>
     <string name="add_packerList_button_description">Add PackerList Button</string>
-    <string name="delete">Delete</string>
+    <string name="your_web_client_id">689361736389-9f2mefsijeo631bve675l4jp4cdbetes.apps.googleusercontent.com</string>
+    <string name="title_activity_users_data">UsersDataActivity</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <!-- Chip strings -->
+    <string name="clothing_chip">Clothing</string>
+    <string name="hygiene_chip">Hygiene</string>
+    <string name="sleeping_chip">Sleeping</string>
+    <string name="food_chip">Food</string>
+    <string name="electronics_chip">Electronics</string>
+    <string name="other_chip">Other</string>
+
+    <string name="sign_in_header">Sign in</string>
+    <string name="username_editText">UserName</string>
+    <string name="password_editText">Password</string>
+    <string name="login_button">LOGIN</string>
+    <string name="singIn_opt_textView">Please Sign In with your Google account</string>
+    <string name="logout_button_description">LogOut Button</string>
+    <string name="add_item_button_description">Add Item Button</string>
 </resources>

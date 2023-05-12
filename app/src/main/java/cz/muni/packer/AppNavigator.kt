@@ -7,4 +7,6 @@ interface AppNavigator {
     fun navigateToItemList(packerList: PackerList)
 
     fun navigateToItemDetails(item: Item)
+
+    fun signOut()
 }

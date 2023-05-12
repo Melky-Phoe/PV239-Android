@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "689361736389",
+    "firebase_url": "https://packer-26f54-default-rtdb.firebaseio.com",
     "project_id": "packer-26f54",
     "storage_bucket": "packer-26f54.appspot.com"
   },
@@ -14,7 +15,23 @@
       },
       "oauth_client": [
         {
-          "client_id": "689361736389-1i6a1vc21af3hm9v3j7shv1ufqt10c47.apps.googleusercontent.com",
+          "client_id": "689361736389-d90deb1ourhth01pqgahc7hmtkicum01.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cz.muni.packer",
+            "certificate_hash": "9e98a3634c45dd9146621962ed8188ed4323f59a"
+          }
+        },
+        {
+          "client_id": "689361736389-vd2s7mq6i3078e9pinmh945niton4m82.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cz.muni.packer",
+            "certificate_hash": "a340b81ae30bce216667e607dff3be9b2066b450"
+          }
+        },
+        {
+          "client_id": "689361736389-9f2mefsijeo631bve675l4jp4cdbetes.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

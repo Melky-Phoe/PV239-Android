@@ -1,42 +1,87 @@
 package cz.muni.packer.repository
 
-import android.content.Context
-import cz.muni.packer.data.Item
+import android.content.ContentValues.TAG
+import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.ktx.Firebase
 import cz.muni.packer.data.PackerList
-import cz.muni.packer.database.item.ItemDatabase
-import cz.muni.packer.database.packerlist.PackerListDao
-import kotlin.collections.List
-import cz.muni.packer.repository.mapper.toAppData
-import cz.muni.packer.repository.mapper.toEntity
 
-class PackerListRepository (
-    context: Context,
-    private val packerListDao: PackerListDao = ItemDatabase.create(context).PackerListDao(),
-    private val itemRepository: ItemRepository = ItemRepository(context)
-) {
+class PackerListRepository {
+    private val database: DatabaseReference = Firebase.database.reference
+    private val auth = FirebaseAuth.getInstance()
 
-    fun getAllLists(): List<PackerList> =
-        packerListDao.getAllPackerLists().map { packerListEntity ->
-            val items = itemRepository.getItemsForPackerList(packerListEntity.id)
-            packerListEntity.toAppData(items)
-        }
+    fun getPackerLists(callback: (List<PackerList>) -> Unit) {
+        val userId = auth.currentUser?.uid ?: return
 
-    fun addPackerList(packerList: PackerList): Long {
-        val packerListEntity = packerList.toEntity()
-        return packerListDao.insert(packerListEntity)
+        database.child("users").child(userId).child("lists").addValueEventListener(object: ValueEventListener {
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                val value = snapshot.children.mapNotNull { it.getValue<PackerList>() }
+                callback(value)
+                Log.d(TAG, "Value is: $value")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w(TAG, "Failed to read value.", error.toException())
+            }
+        })
     }
 
-    fun addItemsToPackerList(packerListId: Long, items: List<Item>) {
-        items.forEach { item ->
-            itemRepository.saveOrUpdate(
-                name = item.name,
-                category = item.category,
-                picture = item.picture,
-                currentCount = item.currentCount,
-                totalCount = item.totalCount,
-                id = item.id,
-                packerListId = packerListId
-            )
+    fun addPackerList(packerList: PackerList) {
+        val userId = auth.currentUser?.uid ?: return
+
+        val key = database.child("users").child(userId).child("lists").push().key ?: return
+        val updatedPackerList = packerList.copy(id = key)
+
+        database.child("users").child(userId).child("lists").child(key).setValue(updatedPackerList)
+    }
+
+    fun updatePackerList(packerList: PackerList) {
+        val userId = auth.currentUser?.uid ?: return
+        if (packerList.id != null) {
+            database.child("users").child(userId).child("lists").child(
+                packerList.id
+            ).setValue(packerList)
         }
+    }
+
+    fun deletePackerList(packerListId: String) {
+        val userId = auth.currentUser?.uid ?: return
+
+        database.child("users").child(userId).child("lists").child(packerListId).removeValue()
+            .addOnSuccessListener {
+                // Delete items that have a .packerListId property matching packerListId
+                deleteItemsWithPackerListId(packerListId)
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Failed to delete packerList with packerListId $packerListId", exception)
+            }
+    }
+
+    private fun deleteItemsWithPackerListId(packerListId: String) {
+        val userId = auth.currentUser?.uid ?: return
+
+        database.child("users").child(userId).child("items")
+            .orderByChild("packerListId")
+            .equalTo(packerListId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach { itemSnapshot ->
+                        itemSnapshot.ref.removeValue()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.w(TAG, "Failed to delete items with packerListId $packerListId", error.toException())
+                }
+            })
     }
 }

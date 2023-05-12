@@ -6,11 +6,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
 import cz.muni.packer.data.Item
-import cz.muni.packer.data.byteArrayToBitmap
+import cz.muni.packer.data.loadImageFromFirebase
 import cz.muni.packer.databinding.ItemBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ItemAdapter(
-    private val onItemClick: (Item) -> Unit, private val onCountUpdate: (Item) -> Unit,
+    private val onItemClick: (Item) -> Unit,
+    private val onCountUpdate: (Item) -> Unit,
 ) : ListAdapter<Item, ItemViewHolder>(ItemDiffUtil()) {
     interface UpdateListener {
         fun onCurrentCountUpdate(item: Item)
@@ -32,7 +36,7 @@ class ItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var _item: Item
-    private var _currentCount: Int = 0
+    private var _currentCount: Int? = 0
         set(value) {
             field = value
             _item.currentCount = value
@@ -56,8 +60,8 @@ class ItemViewHolder(
 
         item.picture?.let { bindPicture(it) }
         binding.plusButton.setOnClickListener {
-            if (item.currentCount < item.totalCount) {
-                _currentCount++
+            if (item.currentCount!! < item.totalCount!!) {
+                _currentCount = _currentCount!! + 1
                 onCountUpdate(item)
             }
         }
@@ -67,8 +71,8 @@ class ItemViewHolder(
                 binding.checkBox.isEnabled = true
                 binding.checkBox.isChecked = false
             }
-            if (item.currentCount > 0) {
-                _currentCount--
+            if (item.currentCount!! > 0) {
+                _currentCount = _currentCount!! - 1
                 onCountUpdate(item)
             }
         }
@@ -90,9 +94,15 @@ class ItemViewHolder(
         }
     }
 
-    private fun bindPicture(pictureBytes: ByteArray) {
-        val picture = byteArrayToBitmap(pictureBytes)
-        binding.imageItem.setImageBitmap(picture)
+    private fun bindPicture(pictureUrl: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val picture = loadImageFromFirebase(pictureUrl)
+            picture?.let {
+                CoroutineScope(Dispatchers.Main).launch {
+                    binding.imageItem.setImageBitmap(it)
+                }
+            }
+        }
     }
 }
 
