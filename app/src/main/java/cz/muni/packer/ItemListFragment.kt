@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -77,7 +79,9 @@ class ItemListFragment : Fragment() {
         }
 
         // TODO: change title to list name
-        // activity?.findViewById<Toolbar>(R.id.toolbar)?.title = args.packerListId.toString()
+        activity?.title = "My title";
+//        (activity as? AppCompatActivity)?.findViewById<Toolbar>(R.id.toolbar)?.title = "listt"
+//         activity?.findViewById<Toolbar>(R.id.toolbar)?.setTitle("listt") // = "listttt"
 
         return binding.root
     }
