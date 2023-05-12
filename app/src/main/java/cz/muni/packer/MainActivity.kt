@@ -105,8 +105,8 @@ class MainActivity : AppCompatActivity() {
                 finish()
             }
             .addOnFailureListener { e ->
-                Log.d(TAG, "firebaseAuthWithGoogleAccount: Logging In failed due to ${e.message}")
-                Toast.makeText(this@MainActivity, "Logging In failed due to ${e.message}", Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "firebaseAuthWithGoogleAccount: Log In failed due to ${e.message}")
+                Toast.makeText(this@MainActivity, "Log In failed due to ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 }
