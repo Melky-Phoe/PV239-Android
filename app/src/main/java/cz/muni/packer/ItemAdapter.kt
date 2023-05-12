@@ -2,9 +2,12 @@ package cz.muni.packer
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import cz.muni.packer.data.Item
 import cz.muni.packer.data.loadImageFromFirebase
 import cz.muni.packer.databinding.ItemBinding
@@ -27,13 +30,20 @@ class ItemAdapter(
         )
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(getItem(position), onItemClick, onCountUpdate)
+        val item = getItem(position)
+        holder.bind(item, onItemClick, onCountUpdate)
+        // Load and cache the image using Glide
+        Glide.with(holder.itemView)
+            .load(item.picture)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .into(holder.imageView)
     }
 }
 
 class ItemViewHolder(
     private val binding: ItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
+    val imageView: ImageView = itemView.findViewById(R.id.imageItem)
 
     private lateinit var _item: Item
     private var _currentCount: Int? = 0
