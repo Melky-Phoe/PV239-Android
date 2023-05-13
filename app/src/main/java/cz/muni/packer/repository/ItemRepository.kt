@@ -41,6 +41,28 @@ class ItemRepository {
             })
     }
 
+    fun getListName(packerListId: String, callback: (String) -> Unit) {
+        val userId = auth.currentUser?.uid ?: return
+
+        database.child("users").child(userId).child("lists").child(packerListId).child("name")
+            .addListenerForSingleValueEvent(object: ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    // Get the name value
+                    val name = dataSnapshot.getValue(String::class.java)
+                    if (name != null) {
+                        callback(name)
+                    } else {
+                        // If name is null
+                        callback("Items")
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.w(ContentValues.TAG, "getListName:onCancelled", databaseError.toException())
+                }
+            })
+    }
+
     fun addItem(item: Item) {
         val userId = auth.currentUser?.uid ?: return
 

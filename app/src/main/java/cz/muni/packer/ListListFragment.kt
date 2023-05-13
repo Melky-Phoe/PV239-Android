@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.packer.data.PackerList
 import cz.muni.packer.databinding.FragmentListListBinding
@@ -47,28 +48,13 @@ class ListListFragment : Fragment() {
         binding.rvItems.layoutManager = LinearLayoutManager(requireContext())
         binding.rvItems.adapter = adapter
 
+        // Add divider
+        val dividerItemDecoration = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
+        binding.rvItems.addItemDecoration(dividerItemDecoration)
+
         binding.addListButton.setOnClickListener {
             showAddEditPackerListDialog("Add New Packer List", "Create")
         }
-
-        /*
-        binding.logoutButton.setOnClickListener {
-            val builder = context?.let { it1 -> androidx.appcompat.app.AlertDialog.Builder(it1) }
-            if (builder != null) {
-                builder.setTitle("Are you sure?")
-                builder.setMessage("Do you want to LogOut?")
-                builder.setPositiveButton("Yes") { _, _ ->
-                    appNavigator.signOut()
-                }
-                builder.setNegativeButton("No") { _, _ ->
-                    // Do nothing
-                }
-                val dialog = builder.create()
-                dialog.show()
-            }
-        }
-
-         */
 
         // Load packer lists and submit them to the adapter
         packerListRepository.getPackerLists { packerLists ->

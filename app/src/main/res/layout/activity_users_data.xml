@@ -22,7 +22,8 @@
             android:layout_gravity="end"
             android:background="@drawable/rounded_button"
             android:padding="8dp"
-            android:layout_marginEnd="@dimen/fab_margin"/>
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:contentDescription="@string/logout_button_description" />
 
     </androidx.appcompat.widget.Toolbar>
 
