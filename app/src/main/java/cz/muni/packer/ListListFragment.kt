@@ -3,6 +3,7 @@ package cz.muni.packer
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -74,7 +75,10 @@ class ListListFragment : Fragment() {
 
     private fun showAddEditPackerListDialog(actionString: String, buttonString: String, packerList: PackerList? = null) {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.new_packer_list_dialog, null)
+
         val listNameEditText = dialogView.findViewById<EditText>(R.id.et_list_name)
+        listNameEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+
         if (packerList?.name != null) {
             listNameEditText.setText(packerList.name)
         }
