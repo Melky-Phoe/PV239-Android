@@ -3,6 +3,7 @@ package cz.muni.packer
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -30,6 +31,22 @@ class UsersDataActivity : AppCompatActivity(), AppNavigator {
         val navController = findNavController(R.id.nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
+
+        binding.btnLogOut.setOnClickListener {
+            val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+            if (builder != null) {
+                builder.setTitle("Are you sure?")
+                builder.setMessage("Do you want to LogOut?")
+                builder.setPositiveButton("Yes") { _, _ ->
+                    signOut()
+                }
+                builder.setNegativeButton("No") { _, _ ->
+                    // Do nothing
+                }
+                val dialog = builder.create()
+                dialog.show()
+            }
+        }
 
     }
 

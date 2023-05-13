@@ -51,6 +51,7 @@ class ListListFragment : Fragment() {
             showAddEditPackerListDialog("Add New Packer List", "Create")
         }
 
+        /*
         binding.logoutButton.setOnClickListener {
             val builder = context?.let { it1 -> androidx.appcompat.app.AlertDialog.Builder(it1) }
             if (builder != null) {
@@ -66,6 +67,8 @@ class ListListFragment : Fragment() {
                 dialog.show()
             }
         }
+
+         */
 
         // Load packer lists and submit them to the adapter
         packerListRepository.getPackerLists { packerLists ->
