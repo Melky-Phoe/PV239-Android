@@ -16,6 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <!--
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/logout_button"
         android:layout_width="wrap_content"
@@ -28,6 +29,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:srcCompat="@drawable/baseline_logout_24"
         android:contentDescription="@string/logout_button_description" />
+    -->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_item_button"
@@ -38,7 +40,7 @@
         android:layout_marginBottom="16dp"
 
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/logout_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:srcCompat="@drawable/ic_add"
         android:contentDescription="@string/add_item_button_description" />
 

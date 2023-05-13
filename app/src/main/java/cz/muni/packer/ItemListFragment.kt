@@ -61,7 +61,7 @@ class ItemListFragment : Fragment() {
             val action = ItemListFragmentDirections.actionItemListFragmentToItemAddEditFragment(packerListId = args.packerListId)
             findNavController().navigate(action)
         }
-
+        /*
         binding.logoutButton.setOnClickListener {
             val builder = context?.let { it1 -> androidx.appcompat.app.AlertDialog.Builder(it1) }
             if (builder != null) {
@@ -78,10 +78,11 @@ class ItemListFragment : Fragment() {
             }
         }
 
+         */
+
         // TODO: change title to list name
-        activity?.title = "My title";
-//        (activity as? AppCompatActivity)?.findViewById<Toolbar>(R.id.toolbar)?.title = "listt"
-//         activity?.findViewById<Toolbar>(R.id.toolbar)?.setTitle("listt") // = "listttt"
+        appNavigator.setToolbarTitle("new title")
+
 
         return binding.root
     }

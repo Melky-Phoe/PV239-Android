@@ -81,4 +81,8 @@ class UsersDataActivity : AppCompatActivity(), AppNavigator {
         GoogleSignIn.getClient(this, GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()).signOut()
         checkUser()
     }
+
+    override fun setToolbarTitle(title: String) {
+        binding.toolbar.title = title
+    }
 }
