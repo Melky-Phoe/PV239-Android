@@ -9,4 +9,6 @@ interface AppNavigator {
     fun navigateToItemDetails(item: Item)
 
     fun signOut()
+
+    fun setToolbarTitle(title: String)
 }

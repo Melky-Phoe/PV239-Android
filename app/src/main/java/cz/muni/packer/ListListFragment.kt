@@ -3,6 +3,7 @@ package cz.muni.packer
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.muni.packer.data.PackerList
 import cz.muni.packer.databinding.FragmentListListBinding
@@ -47,24 +49,12 @@ class ListListFragment : Fragment() {
         binding.rvItems.layoutManager = LinearLayoutManager(requireContext())
         binding.rvItems.adapter = adapter
 
+        // Add divider
+        val dividerItemDecoration = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
+        binding.rvItems.addItemDecoration(dividerItemDecoration)
+
         binding.addListButton.setOnClickListener {
             showAddEditPackerListDialog("Add New Packer List", "Create")
-        }
-
-        binding.logoutButton.setOnClickListener {
-            val builder = context?.let { it1 -> androidx.appcompat.app.AlertDialog.Builder(it1) }
-            if (builder != null) {
-                builder.setTitle("Are you sure?")
-                builder.setMessage("Do you want to LogOut?")
-                builder.setPositiveButton("Yes") { _, _ ->
-                    appNavigator.signOut()
-                }
-                builder.setNegativeButton("No") { _, _ ->
-                    // Do nothing
-                }
-                val dialog = builder.create()
-                dialog.show()
-            }
         }
 
         // Load packer lists and submit them to the adapter
@@ -85,7 +75,10 @@ class ListListFragment : Fragment() {
 
     private fun showAddEditPackerListDialog(actionString: String, buttonString: String, packerList: PackerList? = null) {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.new_packer_list_dialog, null)
+
         val listNameEditText = dialogView.findViewById<EditText>(R.id.et_list_name)
+        listNameEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+
         if (packerList?.name != null) {
             listNameEditText.setText(packerList.name)
         }

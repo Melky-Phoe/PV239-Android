@@ -7,7 +7,6 @@
     <fragment
         android:id="@+id/itemListFragment"
         android:name="cz.muni.packer.ItemListFragment"
-        android:label="List Items"
         tools:layout="@layout/fragment_item_list" >
         <action
             android:id="@+id/action_itemListFragment_to_itemAddEditFragment"

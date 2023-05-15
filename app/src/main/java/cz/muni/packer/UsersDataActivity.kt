@@ -31,6 +31,20 @@ class UsersDataActivity : AppCompatActivity(), AppNavigator {
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
 
+        binding.btnLogOut.setOnClickListener {
+            val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+            builder.setTitle("Are you sure?")
+            builder.setMessage("Do you want to LogOut?")
+            builder.setPositiveButton("Yes") { _, _ ->
+                signOut()
+            }
+            builder.setNegativeButton("No") { _, _ ->
+                // Do nothing
+            }
+            val dialog = builder.create()
+            dialog.show()
+        }
+
     }
 
     private fun checkUser() {
@@ -63,5 +77,9 @@ class UsersDataActivity : AppCompatActivity(), AppNavigator {
         firebaseAuth.signOut()
         GoogleSignIn.getClient(this, GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()).signOut()
         checkUser()
+    }
+
+    override fun setToolbarTitle(title: String) {
+        binding.toolbar.title = title
     }
 }

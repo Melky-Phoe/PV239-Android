@@ -19,24 +19,22 @@ class ItemAdapter(
     private val onItemClick: (Item) -> Unit,
     private val onCountUpdate: (Item) -> Unit,
 ) : ListAdapter<Item, ItemViewHolder>(ItemDiffUtil()) {
-    interface UpdateListener {
-        fun onCurrentCountUpdate(item: Item)
 
-    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder =
         ItemViewHolder(
             ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            //, updateListener
         )
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item, onItemClick, onCountUpdate)
-        // Load and cache the image using Glide
-        Glide.with(holder.itemView)
-            .load(item.picture)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .into(holder.imageView)
+        if (item.picture != null) {
+            // Load and cache the image using Glide
+            Glide.with(holder.itemView)
+                .load(item.picture)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.imageView)
+        }
     }
 }
 

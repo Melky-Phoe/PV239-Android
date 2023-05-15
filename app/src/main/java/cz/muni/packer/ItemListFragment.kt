@@ -1,13 +1,13 @@
 package cz.muni.packer
 
+import android.content.ContentValues
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toolbar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,6 +40,11 @@ class ItemListFragment : Fragment() {
     ): View {
         binding = FragmentItemListBinding.inflate(layoutInflater, container, false)
 
+        itemRepository.getListName(args.packerListId) { name ->
+            appNavigator.setToolbarTitle(name)
+            Log.d(ContentValues.TAG, "PackerList name is $name")
+        }
+
         itemRepository.getItems(args.packerListId) { packerListItems ->
             // This is added because the app has failed here due to "attempting to access the
             // context of the ItemListFragment when the fragment is not attached to a context"
@@ -61,27 +66,6 @@ class ItemListFragment : Fragment() {
             val action = ItemListFragmentDirections.actionItemListFragmentToItemAddEditFragment(packerListId = args.packerListId)
             findNavController().navigate(action)
         }
-
-        binding.logoutButton.setOnClickListener {
-            val builder = context?.let { it1 -> androidx.appcompat.app.AlertDialog.Builder(it1) }
-            if (builder != null) {
-                builder.setTitle("Are you sure?")
-                builder.setMessage("Do you want to LogOut?")
-                builder.setPositiveButton("Yes") { _, _ ->
-                    appNavigator.signOut()
-                }
-                builder.setNegativeButton("No") { _, _ ->
-                    // Do nothing
-                }
-                val dialog = builder.create()
-                dialog.show()
-            }
-        }
-
-        // TODO: change title to list name
-        activity?.title = "My title";
-//        (activity as? AppCompatActivity)?.findViewById<Toolbar>(R.id.toolbar)?.title = "listt"
-//         activity?.findViewById<Toolbar>(R.id.toolbar)?.setTitle("listt") // = "listttt"
 
         return binding.root
     }
