@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 data class PackerList(
     val id: String? = null,
     val name: String? = null,
-    val items: List<Item>? = null,
+    var items: MutableList<Item>? = null,
 ) : Parcelable {
 
 }
