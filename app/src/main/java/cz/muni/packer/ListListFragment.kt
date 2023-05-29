@@ -29,9 +29,6 @@ class ListListFragment : Fragment() {
     private val packerListRepository: PackerListRepository by lazy {
         PackerListRepository()
     }
-    private val itemRepository: ItemRepository by lazy {
-        ItemRepository()
-    }
     private lateinit var appNavigator: AppNavigator
 
     override fun onAttach(context: Context) {
@@ -67,7 +64,7 @@ class ListListFragment : Fragment() {
         packerListRepository.getPackerLists { packerLists ->
             for (list in packerLists) {
                 list.items = mutableListOf()
-                itemRepository.getItems(list.id!!) { items ->
+                packerListRepository.getItems(list.id!!) { items ->
                     for (item in items) {
                         list.items!!.add(item)
                     }
@@ -149,7 +146,7 @@ class ListListFragment : Fragment() {
         packerListRepository.getPackerLists { packerLists ->
             for (list in packerLists) {
                 list.items = mutableListOf()
-                itemRepository.getItems(list.id!!) { items ->
+                packerListRepository.getItems(list.id!!) { items ->
                     for (item in items) {
                         list.items!!.add(item)
                     }
@@ -170,7 +167,7 @@ class ListListFragment : Fragment() {
         packerListRepository.getPackerLists { packerLists ->
             for (list in packerLists) {
                 list.items = mutableListOf()
-                itemRepository.getItems(list.id!!) { items ->
+                packerListRepository.getItems(list.id!!) { items ->
                     for (item in items) {
                         list.items!!.add(item)
                     }
