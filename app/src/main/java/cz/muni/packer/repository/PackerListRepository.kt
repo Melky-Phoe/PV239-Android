@@ -1,5 +1,6 @@
 package cz.muni.packer.repository
 
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
@@ -10,6 +11,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import cz.muni.packer.data.Item
 import cz.muni.packer.data.PackerList
 
 class PackerListRepository {
@@ -51,6 +53,27 @@ class PackerListRepository {
                 packerList.id
             ).setValue(packerList)
         }
+    }
+
+    fun getItems(packerListId: String, callback: (List<Item>) -> Unit) {
+        val userId = auth.currentUser?.uid ?: return
+
+        database.child("users").child(userId).child("items")
+            .addValueEventListener(object : ValueEventListener {
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    val items = snapshot.children.mapNotNull { it.getValue<Item>() }
+                    val filteredItems = items.filter { it.packerListId == packerListId }
+                    callback(filteredItems)
+                    Log.d(ContentValues.TAG, "Value is: $filteredItems")
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+                }
+            })
     }
 
     fun deletePackerList(packerListId: String) {

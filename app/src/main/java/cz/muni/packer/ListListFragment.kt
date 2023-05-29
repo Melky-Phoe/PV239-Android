@@ -13,8 +13,11 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import cz.muni.packer.data.Category
+import cz.muni.packer.data.Item
 import cz.muni.packer.data.PackerList
 import cz.muni.packer.databinding.FragmentListListBinding
+import cz.muni.packer.repository.ItemRepository
 import cz.muni.packer.repository.PackerListRepository
 
 /**
@@ -59,7 +62,24 @@ class ListListFragment : Fragment() {
 
         // Load packer lists and submit them to the adapter
         packerListRepository.getPackerLists { packerLists ->
-            adapter.submitList(packerLists)
+            var counter = 0
+            for (list in packerLists) {
+                list.items = mutableListOf()
+                packerListRepository.getItems(list.id!!) { items ->
+                    for (item in items) {
+                        list.items!!.add(item)
+                    }
+
+                    // Increment the counter
+                    counter++
+
+                    // Check if all items have been fetched for each packer list
+                    if (counter == packerLists.size) {
+                        // All items have been fetched, submit the packer lists to the adapter
+                        adapter.submitList(packerLists)
+                    }
+                }
+            }
         }
 
         return binding.root
@@ -125,13 +145,22 @@ class ListListFragment : Fragment() {
     }
 
     private fun createNewPackerList(listName: String) {
-        val newPackerList = PackerList(id = "", name = listName, items = emptyList())
+        val newPackerList = PackerList(id = "", name = listName, items = mutableListOf())
 
         // Save the new PackerList to the database
         packerListRepository.addPackerList(newPackerList)
 
         // Fetch updated packer lists and submit them to the adapter
         packerListRepository.getPackerLists { packerLists ->
+            for (list in packerLists) {
+                list.items = mutableListOf()
+                packerListRepository.getItems(list.id!!) { items ->
+                    for (item in items) {
+                        list.items!!.add(item)
+                    }
+
+                }
+            }
             adapter.submitList(packerLists)
         }
     }
@@ -144,6 +173,15 @@ class ListListFragment : Fragment() {
 
         // Fetch updated packer lists and submit them to the adapter
         packerListRepository.getPackerLists { packerLists ->
+            for (list in packerLists) {
+                list.items = mutableListOf()
+                packerListRepository.getItems(list.id!!) { items ->
+                    for (item in items) {
+                        list.items!!.add(item)
+                    }
+
+                }
+            }
             adapter.submitList(packerLists)
         }
     }

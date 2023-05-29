@@ -28,6 +28,19 @@ class PackerListViewHolder(
     fun bind(packerList: PackerList, onItemClick: (PackerList) -> Unit, onLongItemClick: (PackerList) -> Unit) {
         binding.tvListTitle.text = packerList.name
 
+        var totalItems = 0
+        var currentItems = 0
+
+        packerList.items?.let { items ->
+            for (item in items) {
+                totalItems += item.totalCount ?: 0
+                currentItems += item.currentCount ?: 0
+            }
+        }
+
+        binding.progressBar.max = totalItems
+        binding.progressBar.progress = currentItems
+
         binding.root.setOnClickListener {
             onItemClick(packerList)
         }
