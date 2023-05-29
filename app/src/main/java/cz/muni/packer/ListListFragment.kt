@@ -62,6 +62,7 @@ class ListListFragment : Fragment() {
 
         // Load packer lists and submit them to the adapter
         packerListRepository.getPackerLists { packerLists ->
+            var counter = 0
             for (list in packerLists) {
                 list.items = mutableListOf()
                 packerListRepository.getItems(list.id!!) { items ->
@@ -69,9 +70,16 @@ class ListListFragment : Fragment() {
                         list.items!!.add(item)
                     }
 
+                    // Increment the counter
+                    counter++
+
+                    // Check if all items have been fetched for each packer list
+                    if (counter == packerLists.size) {
+                        // All items have been fetched, submit the packer lists to the adapter
+                        adapter.submitList(packerLists)
+                    }
                 }
             }
-            adapter.submitList(packerLists)
         }
 
         return binding.root
